@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-gray-100 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-extrabold text-gray-900">
+        Ajouter une programmation
+      </h1>
+    </div>
+
+    <div class="mt-8">
+      <%= form_with(model: [:admin, @programmation], class: "space-y-6") do |f| %>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            Rechercher un film
+          </label>
+          <div class="mt-1 relative">
+            <input type="text" id="movie-search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Titre du film...">
+            <div id="search-results" class="absolute z-10 w-full bg-white shadow-lg rounded-md hidden">
+            </div>
+          </div>
+        </div>
+
+        <%= f.hidden_field :tmdb_id %>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            Date de projection
+          </label>
+          <div class="mt-1">
+            <%= f.date_field :date, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">
+            Heure de projection
+          </label>
+          <div class="mt-1">
+            <%= f.time_field :heure, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <%= f.submit "Ajouter la programmation", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    let searchTimeout;
+    const searchInput = document.getElementById('movie-search');
+    const searchResults = document.getElementById('search-results');
+    const tmdbIdInput = document.querySelector('[name="programmation[tmdb_id]"]');
+
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(function() {
+        const query = searchInput.value;
+        if (query.length > 2) {
+          fetch(`/admin/programmations/search_movies?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(movies => {
+              searchResults.innerHTML = '';
+              searchResults.classList.remove('hidden');
+              
+              movies.forEach(movie => {
+                const div = document.createElement('div');
+                div.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+                div.textContent = `${movie.title} (${movie.release_date.split('-')[0]})`;
+                div.addEventListener('click', function() {
+                  searchInput.value = movie.title;
+                  tmdbIdInput.value = movie.id;
+                  searchResults.classList.add('hidden');
+                });
+                searchResults.appendChild(div);
+              });
+            });
+        }
+      }, 300);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!searchResults.contains(e.target) && e.target !== searchInput) {
+        searchResults.classList.add('hidden');
+      }
+    });
+  });
+<% end %> 
