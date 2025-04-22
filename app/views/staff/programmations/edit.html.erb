@@ -1,0 +1,82 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold">Modifier la programmation</h1>
+  </div>
+
+  <%= form_with(model: [:admin, @programmation], local: true, class: "space-y-6") do |f| %>
+    <% if @programmation.errors.any? %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Des erreurs ont empêché la sauvegarde :</strong>
+        <ul class="mt-2 list-disc list-inside">
+          <% @programmation.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-4">
+      <div>
+        <%= f.label :tmdb_id, "Film", class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <input type="text" id="movie_search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Rechercher un film...">
+          <%= f.hidden_field :tmdb_id %>
+        </div>
+        <div id="search_results" class="mt-2"></div>
+      </div>
+
+      <div>
+        <%= f.label :date, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.date_field :date, class: "mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
+      </div>
+
+      <div>
+        <%= f.label :heure, class: "block text-sm font-medium text-gray-700" %>
+        <%= f.time_field :heure, class: "mt-1 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md" %>
+      </div>
+    </div>
+
+    <div class="pt-5">
+      <div class="flex justify-end">
+        <%= link_to "Annuler", admin_programmations_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= f.submit "Mettre à jour", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let searchTimeout;
+  const searchInput = document.getElementById('movie_search');
+  const searchResults = document.getElementById('search_results');
+  const tmdbIdInput = document.getElementById('programmation_tmdb_id');
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const query = this.value.trim();
+      if (query.length > 2) {
+        fetch(`/admin/programmations/search_movies?query=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(movies => {
+            searchResults.innerHTML = '';
+            movies.forEach(movie => {
+              const div = document.createElement('div');
+              div.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+              div.textContent = `${movie.title} (${movie.release_date.split('-')[0]})`;
+              div.addEventListener('click', () => {
+                searchInput.value = movie.title;
+                tmdbIdInput.value = movie.id;
+                searchResults.innerHTML = '';
+              });
+              searchResults.appendChild(div);
+            });
+          });
+      } else {
+        searchResults.innerHTML = '';
+      }
+    }, 300);
+  });
+});
+</script> 

@@ -51,6 +51,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Pour gérer les variables d'environnement en développement
+  gem "dotenv-rails"
 end
 
 group :development do
@@ -69,3 +72,8 @@ gem "devise", "~> 4.9"
 gem "tailwindcss-rails", "~> 3.3.1"
 
 gem "themoviedb-api"
+
+gem "activeadmin"
+gem "sassc-rails"
+gem "sprockets", "~> 4.0"
+gem "sprockets-rails", require: "sprockets/railtie"

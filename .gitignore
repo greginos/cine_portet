@@ -35,3 +35,8 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore environment variables
+.env
+.env.local
+.env.*.local
