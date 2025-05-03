@@ -1,35 +1,45 @@
 class Programmation < ApplicationRecord
-  validates :date, :heure, presence: true
-  validates :titre, presence: true, unless: -> { imdb_id.present? }
-  validates :imdb_id, presence: true, if: -> { titre.blank? }
+  validates :time, presence: true
+  validates :imdb_id, presence: true, uniqueness: true
+  validates :max_tickets, numericality: { greater_than: 0 }, allow_nil: true
+  validates :normal_price, :member_price, :reduced_price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
-  after_create :fetch_movie_details, if: -> { imdb_id.present? }
-  after_update :fetch_movie_details, if: :imdb_id_changed?
+  belongs_to :movie
+  has_many :programmation_staffs, dependent: :destroy
+  has_many :staff_members, through: :programmation_staffs, source: :user
+  has_many :tickets, dependent: :destroy
+  accepts_nested_attributes_for :programmation_staffs, allow_destroy: true, reject_if: :all_blank
 
-  def start_time
-    date.to_datetime + heure.seconds_since_midnight.seconds
+  before_validation :create_movie_from_imdb, if: -> { imdb_id.present? && movie.nil? }
+
+  def projectionists
+    staff_members.joins(:programmation_staffs).where(programmation_staffs: { role: :projectionist })
   end
 
-  def fetch_movie_details
-    return unless imdb_id.present?
+  def openers
+    staff_members.joins(:programmation_staffs).where(programmation_staffs: { role: :opener })
+  end
 
-    # Trouver d'abord l'ID TMDB à partir de l'ID IMDB
-    find_result = Tmdb::Find.movie(imdb_id, external_source: "imdb_id")
-    return unless find_result.any?
+  def ticket_sellers
+    staff_members.joins(:programmation_staffs).where(programmation_staffs: { role: :ticket_seller })
+  end
 
-    tmdb_id = find_result.first["id"]
-    movie = Tmdb::Movie.detail(tmdb_id)
-    # credits = Tmdb::Movie.credits(tmdb_id)
+  def start_time
+    time
+  end
 
-    self.titre = movie.title
-    self.description = movie.overview
-    self.genre = movie.genres.map { |g| g["name"] }.join(", ")
-    self.duree = movie.runtime
-    # self.realisateur = credits.crew.find { |c| c["job"] == "Director" }&.dig("name")
-    # self.acteurs = credits.cast.take(3).map { |a| a["name"] }.join(", ")
-    self.affiche_url = "https://image.tmdb.org/t/p/w500#{movie.poster_path}" if movie.poster_path
+  def tickets_sold
+    tickets.where(status: :paid).sum(:quantity)
+  end
 
-    save
+  def tickets_available?
+    return true if max_tickets.nil?
+    tickets_sold < max_tickets
+  end
+
+  def tickets_remaining
+    return nil if max_tickets.nil?
+    max_tickets - tickets_sold
   end
 
   def self.search_tmdb(query)
@@ -45,11 +55,45 @@ class Programmation < ApplicationRecord
 
   # Ajout des attributs recherchables pour Active Admin
   def self.ransackable_attributes(auth_object = nil)
-    [ "acteurs", "affiche_url", "created_at", "date", "description", "duree", "genre", "heure", "id", "realisateur", "titre", "imdb_id", "updated_at" ]
+    %w[
+      time
+      id
+      imdb_id
+      updated_at
+      max_tickets
+      normal_price
+      member_price
+      reduced_price
+      created_at
+      movie_id
+    ]
   end
 
   # Ajout des associations recherchables pour Active Admin
   def self.ransackable_associations(auth_object = nil)
-    []
+    %w[
+      programmation_staffs
+      staff_members
+      tickets
+      movie
+    ]
+  end
+
+  private
+
+  def create_movie_from_imdb
+    movie_details = ::MovieService.fetch_movie_details(imdb_id)
+    return unless movie_details
+
+    self.movie = Movie.create!(
+      title: movie_details["title"],
+      description: movie_details["description"],
+      duration: movie_details["duration"],
+      genre: movie_details["genre"],
+      director: movie_details["director"],
+      cast: movie_details["actors"],
+      poster_url: movie_details["poster_url"],
+      imdb_id: imdb_id
+    )
   end
 end

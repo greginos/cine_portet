@@ -1,0 +1,29 @@
+<div class="max-w-2xl mx-auto p-6">
+  <div class="bg-white shadow rounded-lg p-6 text-center">
+    <div class="mb-6">
+      <svg class="mx-auto h-16 w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+    </div>
+
+    <h1 class="text-2xl font-bold mb-4">Paiement réussi !</h1>
+    <p class="text-gray-600 mb-6">Vos billets ont été réservés avec succès.</p>
+
+    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+      <h2 class="font-semibold mb-2">Détails de votre réservation</h2>
+      <div class="text-left space-y-2">
+        <p><strong>Film :</strong> <%= @ticket.programmation.title %></p>
+        <p><strong>Date :</strong> <%= @ticket.programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
+        <p><strong>Type de billet :</strong> <%= @ticket.ticket_type_name %></p>
+        <p><strong>Quantité :</strong> <%= @ticket.quantity %></p>
+        <p><strong>Total :</strong> <%= number_to_currency(@ticket.total_price, unit: "€") %></p>
+      </div>
+    </div>
+
+    <p class="text-sm text-gray-500 mb-6">
+      Un email de confirmation a été envoyé à <%= @ticket.email %>
+    </p>
+
+    <%= link_to "Retour à l'accueil", root_path, class: "inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+  </div>
+</div> 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_22_212359) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_03_214136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,20 +40,61 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_212359) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "programmations", force: :cascade do |t|
-    t.string "titre"
+  create_table "movies", force: :cascade do |t|
+    t.string "title", null: false
     t.text "description"
-    t.date "date"
-    t.time "heure"
-    t.string "affiche_url"
+    t.integer "duration"
     t.string "genre"
-    t.integer "duree"
-    t.string "realisateur"
-    t.string "acteurs"
+    t.jsonb "director", default: {}
+    t.jsonb "cast", default: {}
+    t.string "poster_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "imdb_id"
+    t.index ["genre"], name: "index_movies_on_genre"
+    t.index ["imdb_id"], name: "index_movies_on_imdb_id", unique: true
+    t.index ["title"], name: "index_movies_on_title"
+  end
+
+  create_table "programmation_staffs", force: :cascade do |t|
+    t.bigint "programmation_id", null: false
+    t.bigint "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["programmation_id", "user_id", "role"], name: "index_programmation_staff_unique", unique: true
+    t.index ["programmation_id"], name: "index_programmation_staffs_on_programmation_id"
+    t.index ["user_id"], name: "index_programmation_staffs_on_user_id"
+  end
+
+  create_table "programmations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "imdb_id"
+    t.datetime "time"
+    t.integer "max_tickets"
+    t.decimal "normal_price", precision: 8, scale: 2
+    t.decimal "member_price", precision: 8, scale: 2
+    t.decimal "reduced_price", precision: 8, scale: 2
+    t.bigint "movie_id", null: false
     t.index ["imdb_id"], name: "index_programmations_on_imdb_id"
+    t.index ["movie_id"], name: "index_programmations_on_movie_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "programmation_id", null: false
+    t.string "ticket_type", null: false
+    t.decimal "price", precision: 8, scale: 2, null: false
+    t.integer "quantity", default: 1, null: false
+    t.string "status", default: "pending", null: false
+    t.string "stripe_session_id"
+    t.string "email"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["programmation_id"], name: "index_tickets_on_programmation_id"
+    t.index ["status"], name: "index_tickets_on_status"
+    t.index ["ticket_type"], name: "index_tickets_on_ticket_type"
   end
 
   create_table "users", force: :cascade do |t|
@@ -67,4 +108,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_212359) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "programmation_staffs", "programmations"
+  add_foreign_key "programmation_staffs", "users"
+  add_foreign_key "programmations", "movies"
+  add_foreign_key "tickets", "programmations"
 end

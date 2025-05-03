@@ -1,6 +1,9 @@
 class ProgrammationsController < ApplicationController
   def index
-    @programmations = Programmation.all
-    @date = params.fetch(:date, Date.today).to_date
+    @programmations = Programmation.where("time > ?", Time.current).order(:time)
+  end
+
+  def show
+    @programmation = Programmation.find(params[:id])
   end
 end

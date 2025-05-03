@@ -17,9 +17,9 @@
           </div>
           <% programmations.each do |programmation| %>
             <div class="mt-1 text-xs text-indigo-600">
-              <%= programmation.heure.strftime("%H:%M") %>
+              <%= programmation.time.strftime("%H:%M") %>
               <div class="font-medium text-gray-900">
-                <%= programmation.titre %>
+                <%= programmation.title %>
               </div>
             </div>
           <% end %>
@@ -32,21 +32,21 @@
         <div class="bg-white overflow-hidden shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <div class="flex items-center">
-              <% if programmation.affiche_url.present? %>
-                <img class="h-32 w-24 object-cover rounded" src="<%= programmation.affiche_url %>" alt="<%= programmation.titre %>">
+              <% if programmation.poster_url.present? %>
+                <img class="h-32 w-24 object-cover rounded" src="<%= programmation.poster_url %>" alt="<%= programmation.title %>">
               <% end %>
               <div class="ml-4">
                 <h3 class="text-lg font-medium text-gray-900">
-                  <%= programmation.titre %>
+                  <%= programmation.title %>
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.date.strftime("%d/%m/%Y") %> à <%= programmation.heure.strftime("%H:%M") %>
+                  <%= programmation.time.strftime("%d/%m/%Y") %> à <%= programmation.time.strftime("%H:%M") %>
                 </p>
                 <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.duree %> minutes - <%= programmation.genre %>
+                  <%= programmation.duration %> minutes - <%= programmation.genre %>
                 </p>
                 <p class="mt-1 text-sm text-gray-500">
-                  Réalisé par <%= programmation.realisateur %>
+                  Réalisé par <%= programmation.director["name"] %>
                 </p>
               </div>
             </div>
@@ -57,12 +57,62 @@
             </div>
             <div class="mt-4">
               <p class="text-sm text-gray-500">
-                <span class="font-medium">Avec :</span> <%= programmation.acteurs %>
+                <span class="font-medium">Avec :</span> 
+                <% programmation.actors.each do |actor| %>
+                  <%= actor["name"] %><%= "," unless actor == programmation.actors.last %>
+                <% end %>
               </p>
             </div>
           </div>
         </div>
       <% end %>
     </div>
+  </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <h1 class="text-3xl font-bold mb-8">Programmation</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @programmations.each do |programmation| %>
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <% if programmation.poster_url.present? %>
+          <%= image_tag programmation.poster_url, class: "w-full h-64 object-cover" %>
+        <% end %>
+
+        <div class="p-6">
+          <h2 class="text-xl font-semibold mb-2"><%= programmation.title %></h2>
+          
+          <div class="text-gray-600 mb-4">
+            <p><%= programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
+            <p><%= programmation.duration %> minutes</p>
+            <p><%= programmation.genre %></p>
+          </div>
+
+          <div class="mb-4">
+            <h3 class="font-medium mb-2">Tarifs :</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <% if programmation.normal_price.present? %>
+                <li>Normal : <%= number_to_currency(programmation.normal_price, unit: "€") %></li>
+              <% end %>
+              <% if programmation.member_price.present? %>
+                <li>Adhérent : <%= number_to_currency(programmation.member_price, unit: "€") %></li>
+              <% end %>
+              <% if programmation.reduced_price.present? %>
+                <li>Réduit : <%= number_to_currency(programmation.reduced_price, unit: "€") %></li>
+              <% end %>
+            </ul>
+          </div>
+
+          <% if programmation.tickets_available? %>
+            <%= link_to "Acheter des billets", new_programmation_ticket_path(programmation), class: "block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+          <% else %>
+            <div class="text-center text-red-600 font-medium">
+              Complet
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div> 

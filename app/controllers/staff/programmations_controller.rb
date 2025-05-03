@@ -24,7 +24,7 @@ class Staff::ProgrammationsController < ApplicationController
   def update
     @programmation = Programmation.find(params[:id])
     if @programmation.update(programmation_params)
-      @programmation.fetch_movie_details if @programmation.tmdb_id.present?
+      @programmation.fetch_movie_details if @programmation.tmdb_id.present? && @programmation.saved_change_to_tmdb_id?
       redirect_to staff_programmations_path, notice: "Programmation mise à jour avec succès."
     else
       render :edit

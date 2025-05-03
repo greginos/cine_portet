@@ -2,10 +2,16 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  # Defines the root path route ("/")
   root "home#index"
 
-  resources :programmations, only: [ :index ]
+  resources :programmations, only: [ :index, :show ] do
+    resources :tickets, only: [ :new, :create, :show ] do
+      member do
+        get :success
+        get :cancel
+      end
+    end
+  end
 
   # Renommons notre namespace admin en staff pour éviter les conflits
   namespace :staff do
