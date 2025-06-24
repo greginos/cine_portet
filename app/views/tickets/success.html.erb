@@ -12,7 +12,7 @@
     <div class="bg-gray-50 rounded-lg p-4 mb-6">
       <h2 class="font-semibold mb-2">Détails de votre réservation</h2>
       <div class="text-left space-y-2">
-        <p><strong>Film :</strong> <%= @ticket.programmation.title %></p>
+        <p><strong>Film :</strong> <%= @ticket.programmation.movie.title %></p>
         <p><strong>Date :</strong> <%= @ticket.programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
         <p><strong>Type de billet :</strong> <%= @ticket.ticket_type_name %></p>
         <p><strong>Quantité :</strong> <%= @ticket.quantity %></p>

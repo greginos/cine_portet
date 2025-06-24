@@ -1,145 +1,183 @@
-<div class="min-h-screen bg-gray-100">
-  <!-- Navigation -->
-  <nav class="bg-white shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <div class="flex-shrink-0 flex items-center">
-            <h1 class="text-2xl font-bold text-gray-900">Ciné Portet</h1>
-          </div>
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a href="#accueil" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Accueil
-            </a>
-            <a href="#a-propos" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              À propos
-            </a>
-            <a href="#services" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Services
-            </a>
-            <%= link_to "Programmation", programmations_path, class: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" %>
-            <a href="#contact" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Contact
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-
+<div class="min-h-screen bg-gray-50">
   <!-- Hero Section -->
-  <div class="relative bg-gray-900">
-    <div class="absolute inset-0">
-      <%= image_tag "cinema-background.jpg", class: "w-full h-full object-cover", alt: "Cinéma" %>
-      <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+  <section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <!-- Image de fond -->
+    <div class="absolute inset-0 z-0">
+      <%= image_tag "cinema-background.jpg", class: "w-full h-full object-cover object-center", alt: "Cinéma", style: "opacity:0.5;" %>
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 mix-blend-multiply opacity-80"></div>
     </div>
-    <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Ciné Portet</h1>
-      <p class="mt-6 text-xl text-gray-300 max-w-3xl">
-        Découvrez notre programmation de films d'auteur et de cinéma indépendant dans une ambiance chaleureuse et conviviale.
-      </p>
+    <!-- Contenu -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Bienvenue au Ciné Portet</h1>
+      <p class="text-xl md:text-2xl mb-8">Découvrez le cinéma autrement</p>
+      <%= link_to "Voir la programmation", programmations_path, class: "dark:bg-blue text-blue-600 px-8 py-3 rounded-lg font-semibold" %>
     </div>
-  </div>
+  </section>
 
-  <!-- Prochaines séances -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="text-center">
-      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-        Prochaines séances
-      </h2>
-      <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-        Réservez vos places pour les prochaines projections
-      </p>
+  <!-- À propos Section -->
+  <section id="a-propos" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">À propos de Ciné Portet</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          Ciné Portet est un cinéma indépendant situé au cœur de Portet-sur-Garonne. 
+          Nous proposons une programmation éclectique allant des films d'auteur aux blockbusters, 
+          en passant par des documentaires et des films pour enfants.
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Programmation Variée</h3>
+          <p class="text-gray-600">Des films pour tous les goûts et tous les âges</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Horaires Flexibles</h3>
+          <p class="text-gray-600">Des séances à différents horaires pour s'adapter à votre emploi du temps</p>
+        </div>
+        
+        <div class="text-center">
+          <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Ambiance Conviviale</h3>
+          <p class="text-gray-600">Un accueil chaleureux dans un cadre agréable</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      <% @programmations.each do |programmation| %>
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="px-4 py-5 sm:p-6">
+  <!-- Services Section -->
+  <section id="services" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Nos Services</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          Découvrez tous les services que nous proposons pour vous offrir la meilleure expérience cinématographique.
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-blue-600 mb-4">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Projection HD</h3>
+          <p class="text-gray-600">Qualité d'image optimale pour une expérience immersive</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-purple-600 mb-4">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Réservation en ligne</h3>
+          <p class="text-gray-600">Réservez vos places facilement depuis notre site web</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-green-600 mb-4">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Événements spéciaux</h3>
+          <p class="text-gray-600">Avant-premières, rencontres avec des réalisateurs</p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-red-600 mb-4">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Tarifs réduits</h3>
+          <p class="text-gray-600">Des prix accessibles pour tous les publics</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Contactez-nous</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+          Une question ? Un projet ? N'hésitez pas à nous contacter !
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-semibold mb-6">Informations</h3>
+          <div class="space-y-4">
             <div class="flex items-center">
-              <% if programmation.movie.poster_url.present? %>
-                <%= image_tag programmation.movie.poster_url, class: "h-32 w-24 object-cover rounded", alt: programmation.movie.title %>
-              <% end %>
-              <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900">
-                  <%= programmation.movie.title %>
-                </h3>
-                <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.time.strftime("%d/%m/%Y") %> à <%= programmation.time.strftime("%H:%M") %>
-                </p>
-                <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.movie.duration %> minutes - <%= programmation.movie.genre %>
-                </p>
-              </div>
+              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span class="text-gray-700">Salle Angèle del Rio Bettini, Allée du Grand Chêne, 31120 Portet-sur-Garonne</span>
             </div>
-            <div class="mt-4">
-              <p class="text-sm text-gray-500 line-clamp-3">
-                <%= programmation.movie.description %>
-              </p>
+            
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              <span class="text-gray-700">05 61 00 00 00</span>
             </div>
-            <div class="mt-4">
-              <%= link_to "Voir les détails", programmation_path(programmation), class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+            <div class="flex items-center">
+              <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              <span class="text-gray-700">contact@cineportet.fr</span>
+            </div>
+            <div class="flex items-center">
+              <a href="https://www.google.com/maps/dir//Salle+Ang%C3%A8le+del+Rio+Bettini,+All.+du+Grand+Ch%C3%AAne,+31120+Portet-sur-Garonne/@43.5419007,1.4072009,19z/data=!4m9!4m8!1m0!1m5!1m1!1s0x12aeb900035c7243:0x4155524357a5ba0a!2m2!1d1.4080327!2d43.5419007!3e0?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" aria-label="Google Maps" class="w-6 h-6 bg-white rounded-full shadow p-1 border border-gray-200">
+                <svg class="w-7 h-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="48" height="48" rx="24" fill="#fff"/>
+                  <path d="M24 8C17.373 8 12 13.373 12 20c0 7.732 10.5 19.5 11.121 20.207a1 1 0 001.758 0C25.5 39.5 36 27.732 36 20c0-6.627-5.373-12-12-12zm0 16a4 4 0 110-8 4 4 0 010 8z" fill="#4285F4"/>
+                  <circle cx="24" cy="20" r="4" fill="#fff"/>
+                </svg>
+              </a>
+              <a href="https://waze.com/ul?ll=43.541115846729,1.40778794256&navigate=yes" target="_blank" rel="noopener" aria-label="Waze" class="w-6 h-6 bg-white rounded-full shadow p-1 border border-gray-200">
+                <svg class="w-7 h-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="48" height="48" rx="24" fill="#fff"/>
+                  <ellipse cx="24" cy="28" rx="14" ry="10" fill="#33CCFF"/>
+                  <circle cx="19" cy="30" r="2" fill="#222"/>
+                  <circle cx="29" cy="30" r="2" fill="#222"/>
+                  <path d="M16 34c3 2 13 2 16-2" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </a>
             </div>
           </div>
         </div>
-      <% end %>
+      </div>
     </div>
+  </section>
 
-    <div class="mt-12 text-center">
-      <%= link_to "Voir toute la programmation", programmations_path, class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
-    </div>
-  </div>
-
-  <!-- Informations pratiques -->
-  <div class="bg-white">
-    <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-          Informations pratiques
-        </h2>
-      </div>
-
-      <div class="mt-12 grid gap-8 md:grid-cols-3">
-        <div class="text-center">
-          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mx-auto">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-          </div>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">Adresse</h3>
-          <p class="mt-2 text-base text-gray-500">
-            1 Place de la République<br>
-            31120 Portet-sur-Garonne
-          </p>
-        </div>
-
-        <div class="text-center">
-          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mx-auto">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">Horaires</h3>
-          <p class="mt-2 text-base text-gray-500">
-            Ouverture des portes : 30 minutes avant chaque séance<br>
-            Fermeture : après la dernière séance
-          </p>
-        </div>
-
-        <div class="text-center">
-          <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mx-auto">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-            </svg>
-          </div>
-          <h3 class="mt-4 text-lg font-medium text-gray-900">Contact</h3>
-          <p class="mt-2 text-base text-gray-500">
-            Tél : 05 61 76 85 85<br>
-            Email : contact@cineportet.fr
-          </p>
-        </div>
+        <p>&copy; 2024 Ciné Portet. Tous droits réservés.</p>
       </div>
     </div>
-  </div>
+  </footer>
 </div> 

@@ -18,7 +18,7 @@ class TicketsController < ApplicationController
           price_data: {
             currency: "eur",
             product_data: {
-              name: "#{@programmation.title} - #{@ticket.ticket_type_name}",
+              name: "#{@programmation.movie.title} - #{@ticket.ticket_type_name}",
               description: "Séance du #{@programmation.time.strftime('%d/%m/%Y à %H:%M')}"
             },
             unit_amount: (@ticket.price * 100).to_i

@@ -7,7 +7,7 @@
         <%= image_tag @programmation.poster_url, class: "w-24 h-36 object-cover rounded" %>
       <% end %>
       <div>
-        <h2 class="text-xl font-semibold"><%= @programmation.title %></h2>
+        <h2 class="text-xl font-semibold"><%= @programmation.movie.title %></h2>
         <p class="text-gray-600"><%= @programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
         <% if @programmation.tickets_remaining.present? %>
           <p class="text-sm text-gray-500"><%= @programmation.tickets_remaining %> places restantes</p>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_03_214136) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_08_210405) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -59,9 +59,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_214136) do
   create_table "programmation_staffs", force: :cascade do |t|
     t.bigint "programmation_id", null: false
     t.bigint "user_id", null: false
-    t.string "role", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "role"
     t.index ["programmation_id", "user_id", "role"], name: "index_programmation_staff_unique", unique: true
     t.index ["programmation_id"], name: "index_programmation_staffs_on_programmation_id"
     t.index ["user_id"], name: "index_programmation_staffs_on_user_id"
@@ -105,6 +105,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_03_214136) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "first_name"
+    t.string "family_name"
+    t.string "sign_in_token"
+    t.datetime "token_expires_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

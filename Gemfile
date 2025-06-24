@@ -54,6 +54,11 @@ group :development, :test do
 
   # Pour gérer les variables d'environnement en développement
   gem "dotenv-rails"
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "webmock"
 end
 
 group :development do

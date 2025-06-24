@@ -2,7 +2,7 @@ ActiveAdmin.register Programmation do
   menu priority: 1
 
   permit_params :imdb_id, :time, :max_tickets, :normal_price, :member_price, :reduced_price,
-                programmation_staff_attributes: [ :id, :user_id, :role, :_destroy ]
+                programmation_staffs_attributes: [ :id, :user_id, :role, :_destroy ]
 
   index do
     selectable_column
@@ -11,24 +11,18 @@ ActiveAdmin.register Programmation do
     column :time
     column :max_tickets
     column :tickets_remaining
-    column :normal_price
-    column :member_price
-    column :reduced_price
+    column :programmation_staffs
     column :created_at
     actions
   end
 
   filter :movie
   filter :time
-  filter :max_tickets
-  filter :normal_price
-  filter :member_price
-  filter :reduced_price
   filter :created_at
 
   form do |f|
     f.inputs "Informations du film" do
-      f.input :imdb_id, label: "ID IMDB (ex: tt0111161)", hint: "Entrez l'ID IMDB du film (commençant par 'tt') pour récupérer automatiquement les informations"
+      f.input :imdb_id, hint: "Entrez l'ID IMDB du film (commençant par 'tt'). Les autres informations seront automatiquement remplies."
     end
 
     f.inputs "Informations de la séance" do
@@ -39,10 +33,16 @@ ActiveAdmin.register Programmation do
       f.input :reduced_price
     end
 
-    f.inputs "Personnel" do
-      f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
-        staff.input :user, label: "Membre"
-        staff.input :role, as: :select, collection: ProgrammationStaff.roles.keys
+    f.inputs "Équipe" do
+      if User.count > 0
+        f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
+          staff.input :user, label: "Membre", as: :select, collection: User.all.map { |u| [ u.full_name, u.id ] }
+          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ ProgrammationStaff::ROLES[k.to_sym], v ] }
+        end
+      else
+        div class: "flash flash_warning" do
+          "Aucun utilisateur n'est disponible. Veuillez d'abord créer des utilisateurs."
+        end
       end
     end
 
@@ -51,7 +51,6 @@ ActiveAdmin.register Programmation do
 
   show do
     attributes_table do
-      row :id
       row :movie
       row :time
       row :max_tickets
@@ -63,24 +62,14 @@ ActiveAdmin.register Programmation do
       row :updated_at
     end
 
-    panel "Personnel" do
+    panel "Équipe" do
       table_for programmation.programmation_staffs do
-        column :user
-        column :role
-        column :actions do |staff|
-          link_to "Supprimer", admin_programmation_staff_path(staff), method: :delete, data: { confirm: "Êtes-vous sûr ?" }
+        column :user do |staff|
+          staff.user.full_name
         end
-      end
-    end
-
-    panel "Tickets vendus" do
-      table_for programmation.tickets do
-        column :id
-        column :user
-        column :quantity
-        column :ticket_type
-        column :status
-        column :created_at
+        column :role do |staff|
+          staff.role_name || staff.role
+        end
       end
     end
   end
@@ -89,7 +78,6 @@ ActiveAdmin.register Programmation do
     def create
       @programmation = Programmation.new(permitted_params[:programmation])
       if @programmation.save
-        @programmation.fetch_movie_details if @programmation.imdb_id.present?
         redirect_to admin_programmation_path(@programmation), notice: "Programmation créée avec succès"
       else
         render :new
@@ -97,9 +85,9 @@ ActiveAdmin.register Programmation do
     end
 
     def update
-      if resource.update(permitted_params[:programmation])
-        resource.fetch_movie_details if resource.imdb_id.present? && resource.saved_change_to_imdb_id?
-        redirect_to admin_programmation_path(resource), notice: "Programmation mise à jour avec succès"
+      @programmation = Programmation.find(params[:id])
+      if @programmation.update(permitted_params[:programmation])
+        redirect_to admin_programmation_path(@programmation), notice: "Programmation mise à jour avec succès"
       else
         render :edit
       end

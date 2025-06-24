@@ -28,18 +28,18 @@
                   <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex items-center">
-                        <% if programmation.poster_url.present? %>
+                        <% if programmation.movie.poster_url.present? %>
                           <div class="flex-shrink-0 h-10 w-10">
-                            <%= image_tag programmation.poster_url, class: "h-10 w-10 rounded-full" %>
+                            <%= image_tag programmation.movie.poster_url, class: "h-10 w-10 rounded-full" %>
                           </div>
                         <% end %>
                         <div class="ml-4">
                           <div class="text-sm font-medium text-gray-900">
-                            <%= programmation.title %>
+                            <%= programmation.movie.title %>
                           </div>
-                          <% if programmation.director.present? %>
+                          <% if programmation.movie.director.present? %>
                             <div class="text-sm text-gray-500">
-                              <%= programmation.director %>
+                              <%= programmation.movie.director["name"] %>
                             </div>
                           <% end %>
                         </div>
@@ -52,8 +52,8 @@
                       <div class="text-sm text-gray-900"><%= l programmation.time, format: :short %></div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <% if programmation.duration.present? %>
-                        <div class="text-sm text-gray-900"><%= programmation.duration %> min</div>
+                      <% if programmation.movie.duration.present? %>
+                        <div class="text-sm text-gray-900"><%= programmation.movie.duration %> min</div>
                       <% end %>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

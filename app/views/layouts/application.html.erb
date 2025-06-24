@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Cine Portet" %></title>
+    <title><%= content_for(:title) || "Cine à Portet de tous" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -22,7 +22,11 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <% unless controller.class.name.start_with?('Admin::') %>
+      <%= render 'shared/navigation' %>
+    <% end %>
+    
+    <main class="container mx-auto flex">
       <%= yield %>
     </main>
   </body>

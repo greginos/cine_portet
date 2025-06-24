@@ -32,34 +32,34 @@
         <div class="bg-white overflow-hidden shadow rounded-lg">
           <div class="px-4 py-5 sm:p-6">
             <div class="flex items-center">
-              <% if programmation.poster_url.present? %>
-                <img class="h-32 w-24 object-cover rounded" src="<%= programmation.poster_url %>" alt="<%= programmation.title %>">
+              <% if programmation.movie.poster_url.present? %>
+                <img class="h-32 w-24 object-cover rounded" src="<%= programmation.movie.poster_url %>" alt="<%= programmation.movie.title %>">
               <% end %>
               <div class="ml-4">
                 <h3 class="text-lg font-medium text-gray-900">
-                  <%= programmation.title %>
+                  <%= programmation.movie.title %>
                 </h3>
                 <p class="mt-1 text-sm text-gray-500">
                   <%= programmation.time.strftime("%d/%m/%Y") %> à <%= programmation.time.strftime("%H:%M") %>
                 </p>
                 <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.duration %> minutes - <%= programmation.genre %>
+                  <%= programmation.movie.duration %> minutes - <%= programmation.movie.genre %>
                 </p>
                 <p class="mt-1 text-sm text-gray-500">
-                  Réalisé par <%= programmation.director["name"] %>
+                  Réalisé par <%= programmation.movie.director["name"] %>
                 </p>
               </div>
             </div>
             <div class="mt-4">
               <p class="text-sm text-gray-500">
-                <%= programmation.description %>
+                <%= programmation.movie.description %>
               </p>
             </div>
             <div class="mt-4">
               <p class="text-sm text-gray-500">
                 <span class="font-medium">Avec :</span> 
-                <% programmation.actors.each do |actor| %>
-                  <%= actor["name"] %><%= "," unless actor == programmation.actors.last %>
+                <% programmation.movie.cast.each do |actor| %>
+                  <%= actor["name"] %><%= "," unless actor == programmation.movie.cast.last %>
                 <% end %>
               </p>
             </div>
@@ -76,17 +76,17 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @programmations.each do |programmation| %>
       <div class="bg-white shadow rounded-lg overflow-hidden">
-        <% if programmation.poster_url.present? %>
-          <%= image_tag programmation.poster_url, class: "w-full h-64 object-cover" %>
+        <% if programmation.movie.poster_url.present? %>
+          <%= image_tag programmation.movie.poster_url, class: "w-full h-64 object-cover" %>
         <% end %>
 
         <div class="p-6">
-          <h2 class="text-xl font-semibold mb-2"><%= programmation.title %></h2>
+          <h2 class="text-xl font-semibold mb-2"><%= programmation.movie.title %></h2>
           
           <div class="text-gray-600 mb-4">
             <p><%= programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
-            <p><%= programmation.duration %> minutes</p>
-            <p><%= programmation.genre %></p>
+            <p><%= programmation.movie.duration %> minutes</p>
+            <p><%= programmation.movie.genre %></p>
           </div>
 
           <div class="mb-4">
