@@ -57,8 +57,9 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Build CSS with Tailwind first
 RUN yarn build:css
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# Create public/assets directory and copy compiled CSS
+RUN mkdir -p public/assets && \
+    cp app/assets/builds/application.css public/assets/application.css
 
 # Final stage for app image
 FROM base
