@@ -1,0 +1,16 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS file if present) with a logical order of application.
+ * You can use Sass (SCSS) here: http://sass-lang.com/
+ */
+
+/*
+ *= require_tree .
+ *= require_self
+ */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities"; 
