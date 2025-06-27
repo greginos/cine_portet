@@ -82,3 +82,5 @@ gem "activeadmin"
 gem "sassc-rails"
 gem "sprockets", "~> 4.0"
 gem "sprockets-rails", require: "sprockets/railtie"
+
+gem "cssbundling-rails", "~> 1.4"
