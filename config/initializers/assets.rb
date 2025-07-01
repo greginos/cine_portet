@@ -10,3 +10,5 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules")
 
 # Add Active Admin assets to the precompile list
 Rails.application.config.assets.precompile += %w[ active_admin.css active_admin.js ]
+
+Rails.application.config.assets.css_compressor = nil
