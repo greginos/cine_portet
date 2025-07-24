@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_many :programmation_staff
   has_many :staffed_programmations, through: :programmation_staff, source: :programmation
 
-  validates :first_name, :family_name, :email, presence: true
+  validates :first_name, :last_name, :email, presence: true
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def staffed_programmations_by_role(role)
@@ -10,8 +10,8 @@ class User < ApplicationRecord
   end
 
   def full_name
-    if first_name.present? && family_name.present?
-      "#{first_name} #{family_name}"
+    if first_name.present? && last_name.present?
+      "#{first_name} #{last_name}"
     else
       email
     end
@@ -40,7 +40,7 @@ class User < ApplicationRecord
     %w[
       created_at
       email
-      family_name
+      last_name
       first_name
       id
       remember_created_at

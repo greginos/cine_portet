@@ -13,7 +13,6 @@ Rails.application.routes.draw do
     end
   end
 
-  # Renommons notre namespace admin en staff pour éviter les conflits
   namespace :staff do
     resources :programmations do
       collection do
@@ -21,6 +20,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :memberships, only: [ :new, :create ]
 
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
