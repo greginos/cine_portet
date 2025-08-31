@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_24_112845) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_31_195004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,7 +76,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_24_112845) do
     t.decimal "normal_price", precision: 8, scale: 2
     t.decimal "member_price", precision: 8, scale: 2
     t.decimal "reduced_price", precision: 8, scale: 2
-    t.bigint "movie_id", null: false
+    t.bigint "movie_id"
     t.index ["imdb_id"], name: "index_programmations_on_imdb_id"
     t.index ["movie_id"], name: "index_programmations_on_movie_id"
   end

@@ -1,10 +1,9 @@
 class Programmation < ApplicationRecord
   validates :time, presence: true
-  validates :imdb_id, presence: true, uniqueness: true
   validates :max_tickets, numericality: { greater_than: 0 }, allow_nil: true
   validates :normal_price, :member_price, :reduced_price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
-  belongs_to :movie
+  belongs_to :movie, optional: true
   has_many :programmation_staffs, dependent: :destroy
   has_many :staff_members, through: :programmation_staffs, source: :user
   has_many :tickets, dependent: :destroy
