@@ -44,3 +44,13 @@ fr:
         movie: "Film"
         created_at: "Créé le"
         updated_at: "Mis à jour le"
+  simple_calendar:
+    previous: "<<"
+    next: ">>"
+    week: "Semaine"
+    today: "Aujourd'hui"
+    month: "Mois"
+    day: "Jour"
+    hour: "Heure"
+    minute: "Minute"
+    second: "Seconde"

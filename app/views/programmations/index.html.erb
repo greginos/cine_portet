@@ -1,94 +1,26 @@
-<div class="min-h-screen bg-gray-100 py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+ <div class="text-center">
       <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
         Programmation des films
       </h1>
       <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-        Découvrez les prochains films au Ciné Portet
+        Découvrez les prochains films projetés au Ciné Portet
       </p>
-    </div>
-
-    <div class="mt-12">
-      <%= month_calendar(events: @programmations) do |date, programmations| %>
-        <div class="h-24 overflow-y-auto">
-          <div class="text-sm font-medium text-gray-900">
-            <%= date.day %>
-          </div>
-          <% programmations.each do |programmation| %>
-            <div class="mt-1 text-xs text-indigo-600">
-              <%= programmation.time.strftime("%H:%M") %>
-              <div class="font-medium text-gray-900">
-                <%= programmation.title %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-      <% @programmations.each do |programmation| %>
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="px-4 py-5 sm:p-6">
-            <div class="flex items-center">
-              <% if programmation.movie&.poster_url.present? %>
-                <img class="h-32 w-24 object-cover rounded" src="<%= programmation.movie.poster_url %>" alt="<%= programmation.movie.title %>">
-              <% end %>
-              <div class="ml-4">
-                <% if programmation.movie.present? %>
-                <h3 class="text-lg font-medium text-gray-900">
-                  <%= programmation.movie.title %>
-                </h3>
-                <% end %>
-                <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.time.strftime("%d/%m/%Y") %> à <%= programmation.time.strftime("%H:%M") %>
-                </p>
-                <% if programmation.movie.present? %>
-                <p class="mt-1 text-sm text-gray-500">
-                  <%= programmation.movie.duration %> minutes - <%= programmation.movie.genre %>
-                </p>
-                <p class="mt-1 text-sm text-gray-500">
-                  Réalisé par <%= programmation.movie.director["name"] %>
-                </p>
-                <% end %>
-              </div>
-            </div>
-            <% if programmation.movie.present? %>
-            <div class="mt-4">
-              <p class="text-sm text-gray-500">
-                <%= programmation.movie.description %>
-              </p>
-            </div>
-            <div class="mt-4">
-              <p class="text-sm text-gray-500">
-                <span class="font-medium">Avec :</span> 
-                <% programmation.movie.cast.each do |actor| %>
-                  <%= actor["name"] %><%= "," unless actor == programmation.movie.cast.last %>
-                <% end %>
-                </p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
   </div>
-</div>
-
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-  <h1 class="text-3xl font-bold mb-8">Programmation</h1>
-
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @programmations.each do |programmation| %>
       <div class="bg-white shadow rounded-lg overflow-hidden">
         <% if programmation.movie&.poster_url.present? %>
           <%= image_tag programmation.movie.poster_url, class: "w-full h-64 object-cover" %>
+        <% else %>
+          <%= image_tag "poster_tbd.jpg", class: "w-full h-64 object-cover" %>
         <% end %>
 
         <div class="p-6">
           <% if programmation.movie.present? %>
-          <h2 class="text-xl font-semibold mb-2"><%= programmation.movie.title %></h2>
+            <h2 class="text-xl font-semibold mb-2"><%= programmation.movie.title %></h2>
+          <% else %>
+            <h2 class="text-xl font-semibold mb-2">Annonce à venir</h2>
           <% end %>
           <div class="text-gray-600 mb-4">
             <p><%= programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
@@ -97,31 +29,32 @@
             <p><%= programmation.movie.genre %></p>
             <% end %>
           </div>
-
-          <div class="mb-4">
-            <h3 class="font-medium mb-2">Tarifs :</h3>
-            <ul class="text-sm text-gray-600 space-y-1">
-              <% if programmation.normal_price.present? %>
-                <li>Normal : <%= number_to_currency(programmation.normal_price, unit: "€") %></li>
-              <% end %>
-              <% if programmation.member_price.present? %>
-                <li>Adhérent : <%= number_to_currency(programmation.member_price, unit: "€") %></li>
-              <% end %>
-              <% if programmation.reduced_price.present? %>
-                <li>Réduit : <%= number_to_currency(programmation.reduced_price, unit: "€") %></li>
-              <% end %>
-            </ul>
-          </div>
-
-          <% if programmation.tickets_available? %>
-            <%= link_to "Acheter des billets", new_programmation_ticket_path(programmation), class: "block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
-          <% else %>
-            <div class="text-center text-red-600 font-medium">
-              Complet
+          <% if programmation.movie.present? %>
+            <div class="mb-4">
+              <h3 class="font-medium mb-2">Tarifs :</h3>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <% if programmation.normal_price.present? %>
+                  <li>Normal : <%= number_to_currency(programmation.normal_price, unit: "€") %></li>
+                <% end %>
+                <% if programmation.member_price.present? %>
+                  <li>Adhérent : <%= number_to_currency(programmation.member_price, unit: "€") %></li>
+                <% end %>
+                <% if programmation.reduced_price.present? %>
+                  <li>Réduit : <%= number_to_currency(programmation.reduced_price, unit: "€") %></li>
+                <% end %>
+              </ul>
             </div>
+
+            <% if programmation.tickets_available? %>
+              <%= link_to "Acheter des billets", new_programmation_ticket_path(programmation), class: "block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+            <% else %>
+              <div class="text-center text-red-600 font-medium">
+                Complet
+              </div>
+            <% end %>
           <% end %>
         </div>
       </div>
     <% end %>
   </div>
-</div> 
+</div>
