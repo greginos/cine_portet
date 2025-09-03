@@ -1,8 +1,10 @@
 class User < ApplicationRecord
-  has_many :programmation_staff
-  has_many :staffed_programmations, through: :programmation_staff, source: :programmation
+  has_many :programmation_staffs
+  has_many :staffed_programmations, through: :programmation_staffs, source: :programmation
 
-  validates :first_name, :last_name, :email, presence: true
+  enum :membership_type, { simple: 0, couple: 1, soutien: 2, couple_soutien: 3 }
+  validates :first_name, :last_name, :email, :membership_type, presence: true
+  validates :paid, inclusion: { in: [ true, false ], message: "doit être précisé (cotisation payée ou non)" }
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def staffed_programmations_by_role(role)
@@ -49,13 +51,20 @@ class User < ApplicationRecord
       updated_at
       sign_in_token
       token_expires_at
+      paid
+      membership_type
+      phone
+      address
+      zip_code
+      city
+      country
     ]
   end
 
   # Ajout des associations recherchables pour Active Admin
   def self.ransackable_associations(auth_object = nil)
     %w[
-      programmation_staff
+      programmation_staffs
       staffed_programmations
     ]
   end

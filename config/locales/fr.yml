@@ -38,12 +38,24 @@ fr:
         imdb_id: "Identifiant IMDB"
         time: "Horaire"
         max_tickets: "Nombre maximum de places"
+        tickets_remaining: "Places restantes"
         normal_price: "Tarif normal"
         member_price: "Tarif adhérent"
         reduced_price: "Tarif réduit"
         movie: "Film"
         created_at: "Créé le"
         updated_at: "Mis à jour le"
+      programmation_staff:
+        roles:
+          projectionist: "Projectionniste"
+          opener: "Ouvreur"
+          ticket_seller: "Vendeur de billets"
+      user:
+        membership_types:
+          simple: "Adhésion simple"
+          couple: "Adhésion couple"
+          soutien: "Adhésion de soutien"
+          couple_soutien: "Adhésion couple de soutien"
   simple_calendar:
     previous: "<<"
     next: ">>"

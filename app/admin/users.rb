@@ -1,71 +1,64 @@
 ActiveAdmin.register User do
   menu priority: 2
 
-  permit_params :first_name, :family_name, :email, :password, :password_confirmation
+  permit_params :first_name, :last_name, :email, :password, :password_confirmation,
+                :phone, :address, :zip_code, :city, :country, :membership_type, :paid
 
+  # === INDEX ===
   index do
     selectable_column
     id_column
     column :first_name
-    column :family_name
+    column :last_name
     column :email
+    column :phone
+    column("Adhésion") { |u| u.membership_type&.humanize }
+    column :paid
     column :created_at
     actions
   end
 
+  # === FILTRES ===
   filter :first_name
-  filter :family_name
-  filter :email
+  filter :last_name
+  filter :membership_type, as: :select, collection: User.membership_types.keys.map { |k| [ I18n.t("activerecord.attributes.user.membership_types.#{k}"), k ] }
+  filter :paid
   filter :created_at
 
+  # === FORMULAIRE ===
   form do |f|
     f.inputs "Informations de l'utilisateur" do
       f.input :first_name
-      f.input :family_name
+      f.input :last_name
       f.input :email
+      f.input :phone
+      f.input :address
+      f.input :zip_code
+      f.input :city
+      f.input :country
+      f.input :membership_type, as: :select, collection: User.membership_types.keys.map { |k| [ I18n.t("activerecord.attributes.user.membership_types.#{k}"), k ] }
+      f.input :paid, as: :boolean, label: "Cotisation payée ?"
       f.input :password
       f.input :password_confirmation
     end
     f.actions
   end
 
+  # === SHOW ===
   show do
     attributes_table do
       row :first_name
-      row :family_name
+      row :last_name
       row :email
+      row :phone
+      row :address
+      row :zip_code
+      row :city
+      row :country
+      row("Adhésion") { |u| u.membership_type&.humanize }
+      row("Cotisation payée ?") { |u| status_tag(u.paid ? "Oui" : "Non", u.paid ? :ok : :error) }
       row :created_at
       row :updated_at
-    end
-
-    panel "Programmations" do
-      table_for user.staffed_programmations do
-        column :movie
-        column :time
-        column :role do |programmation|
-          programmation.programmation_staffs.find_by(user: user).role_name
-        end
-      end
-    end
-
-    action_item :send_magic_link do
-      link_to "Envoyer le lien de connexion", send_magic_link_admin_user_path(resource), method: :post
-    end
-  end
-
-  member_action :send_magic_link, method: :post do
-    token = resource.generate_sign_in_token!
-    MagicLinkMailer.sign_in_email(resource, token).deliver_later
-    redirect_to admin_user_path(resource), notice: "Le lien de connexion a été envoyé à #{resource.email}"
-  end
-
-  controller do
-    def update
-      if params[:user][:password].blank?
-        params[:user].delete(:password)
-        params[:user].delete(:password_confirmation)
-      end
-      super
     end
   end
 end

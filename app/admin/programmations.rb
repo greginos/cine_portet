@@ -11,7 +11,11 @@ ActiveAdmin.register Programmation do
     column :time
     column :max_tickets
     column :tickets_remaining
-    column :programmation_staffs
+    column "Staffs" do |programmation|
+      programmation.programmation_staffs.map do |ps|
+        "#{ps.user.first_name} #{ps.user.last_name} (#{ps.role_name})"
+      end.join(", ").html_safe
+    end
     column :created_at
     actions
   end
@@ -26,7 +30,7 @@ ActiveAdmin.register Programmation do
     end
 
     f.inputs "Informations de la séance" do
-      f.input :time
+      f.input :time, as: :datetime_picker
       f.input :max_tickets
       f.input :normal_price
       f.input :member_price
@@ -37,8 +41,7 @@ ActiveAdmin.register Programmation do
       if User.count > 0
         f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
           staff.input :user, label: "Membre", as: :select, collection: User.all.map { |u| [ u.full_name, u.id ] }
-          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ ProgrammationStaff::ROLES[k.to_sym], v ] }
-        end
+          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ k.humanize, k ] }        end
       else
         div class: "flash flash_warning" do
           "Aucun utilisateur n'est disponible. Veuillez d'abord créer des utilisateurs."
