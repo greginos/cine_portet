@@ -41,7 +41,8 @@ ActiveAdmin.register Programmation do
       if User.count > 0
         f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
           staff.input :user, label: "Membre", as: :select, collection: User.all.map { |u| [ u.full_name, u.id ] }
-          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ k.humanize, k ] }        end
+          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ k.humanize, k ] }
+        end
       else
         div class: "flash flash_warning" do
           "Aucun utilisateur n'est disponible. Veuillez d'abord créer des utilisateurs."
@@ -79,7 +80,38 @@ ActiveAdmin.register Programmation do
 
   controller do
     def create
-      @programmation = Programmation.new(permitted_params[:programmation])
+      programmation_params = permitted_params[:programmation].dup
+
+      # Traiter l'IMDB ID pour obtenir le movie_id
+      if programmation_params[:imdb_id].present?
+        begin
+          movie = Movie.find_or_create_by_imdb_id(programmation_params[:imdb_id])
+          if movie && movie.persisted?
+            programmation_params[:movie_id] = movie.id
+            # Supprimer imdb_id car ce n'est pas un attribut de Programmation
+            programmation_params.delete(:imdb_id)
+          else
+            flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
+            @programmation = Programmation.new(programmation_params)
+            render :new
+            return
+          end
+        rescue => e
+          Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
+          flash[:error] = "Erreur lors de la récupération des informations du film"
+          @programmation = Programmation.new(programmation_params)
+          render :new
+          return
+        end
+      else
+        flash[:error] = "L'ID IMDB est requis"
+        @programmation = Programmation.new(programmation_params)
+        render :new
+        return
+      end
+
+      @programmation = Programmation.new(programmation_params)
+
       if @programmation.save
         redirect_to admin_programmation_path(@programmation), notice: "Programmation créée avec succès"
       else
@@ -89,7 +121,32 @@ ActiveAdmin.register Programmation do
 
     def update
       @programmation = Programmation.find(params[:id])
-      if @programmation.update(permitted_params[:programmation])
+      programmation_params = permitted_params[:programmation].dup
+
+      # Traiter l'IMDB ID pour la mise à jour si présent
+      if programmation_params[:imdb_id].present?
+        begin
+          movie = Movie.find_or_create_by_imdb_id(programmation_params[:imdb_id])
+          if movie && movie.persisted?
+            programmation_params[:movie_id] = movie.id
+            programmation_params.delete(:imdb_id)
+          else
+            flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
+            render :edit
+            return
+          end
+        rescue => e
+          Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
+          flash[:error] = "Erreur lors de la récupération des informations du film"
+          render :edit
+          return
+        end
+      else
+        # Si pas d'imdb_id, supprimer le paramètre pour éviter les erreurs
+        programmation_params.delete(:imdb_id)
+      end
+
+      if @programmation.update(programmation_params)
         redirect_to admin_programmation_path(@programmation), notice: "Programmation mise à jour avec succès"
       else
         render :edit
