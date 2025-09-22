@@ -51,6 +51,17 @@ fr:
           opener: "Ouvreur"
           ticket_seller: "Vendeur de billets"
       user:
+        first_name: "Prénom"
+        last_name: "Nom"
+        email: "Email"
+        phone: "Téléphone"
+        address: "Adresse"
+        zip_code: "Code postal"
+        city: "Ville"
+        member_number: "Numéro d'adhérent"
+        membership_type: "Type d'adhésion"
+        paid: "Cotisation payée ?"
+        teams: "Équipes"
         membership_types:
           simple: "Adhésion simple"
           couple: "Adhésion couple"
