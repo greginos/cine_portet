@@ -66,3 +66,8 @@ fr:
     hour: "Heure"
     minute: "Minute"
     second: "Seconde"
+  teams:
+        ticketing: "Billetterie"
+        projection: "Projection"
+        communication: "Communication"
+        other: "Autre"

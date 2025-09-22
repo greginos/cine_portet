@@ -2,7 +2,11 @@ ActiveAdmin.register User do
   menu priority: 2
 
   permit_params :first_name, :last_name, :email, :password, :password_confirmation,
-                :phone, :address, :zip_code, :city, :membership_type, :paid
+                :phone, :address, :zip_code, :city, :membership_type, :paid, teams: []
+
+  before_save do |user|
+    user.teams = user.teams.reject(&:blank?) if user.teams.present?
+  end
 
   # === INDEX ===
   index do
@@ -16,6 +20,13 @@ ActiveAdmin.register User do
     column :paid
     column :created_at
     actions
+    column :teams do |user|
+      if user.teams.present?
+        user.teams.map { |t| I18n.t("teams.#{t}") }.join(", ")
+      else
+        "Aucune"
+      end
+    end
   end
 
   # === FILTRES ===
@@ -38,6 +49,10 @@ ActiveAdmin.register User do
       f.input :member_number
       f.input :membership_type, as: :select, collection: User.membership_types.keys.map { |k| [ I18n.t("activerecord.attributes.user.membership_types.#{k}"), k ] }
       f.input :paid, as: :boolean, label: "Cotisation payée ?"
+      f.input :teams, 
+              as: :check_boxes,
+              collection: User::TEAMS.map { |team| [I18n.t("teams.#{team}"), team] },
+              label: "Équipes"
     end
     f.actions
   end
@@ -58,8 +73,15 @@ ActiveAdmin.register User do
         content_tag :span, (u.paid ? "Oui" : "Non"), 
                     class: "status #{u.paid ? 'paid' : 'unpaid'}"
       end
+      row :teams do |user|
+        if user.teams.present?
+          user.teams.map { |t| I18n.t("teams.#{t.to_s}") }.join(", ")
+        else
+          "Aucune équipe"
+        end
+      end
       row :created_at
-      row :updated_at
-    end
+      row :updated_at   
+    end 
   end
 end
