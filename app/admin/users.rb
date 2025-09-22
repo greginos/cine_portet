@@ -2,7 +2,7 @@ ActiveAdmin.register User do
   menu priority: 2
 
   permit_params :first_name, :last_name, :email, :password, :password_confirmation,
-                :phone, :address, :zip_code, :city, :country, :membership_type, :paid
+                :phone, :address, :zip_code, :city, :membership_type, :paid
 
   # === INDEX ===
   index do
@@ -35,11 +35,9 @@ ActiveAdmin.register User do
       f.input :address
       f.input :zip_code
       f.input :city
-      f.input :country
+      f.input :member_number
       f.input :membership_type, as: :select, collection: User.membership_types.keys.map { |k| [ I18n.t("activerecord.attributes.user.membership_types.#{k}"), k ] }
       f.input :paid, as: :boolean, label: "Cotisation payée ?"
-      f.input :password
-      f.input :password_confirmation
     end
     f.actions
   end
@@ -54,9 +52,12 @@ ActiveAdmin.register User do
       row :address
       row :zip_code
       row :city
-      row :country
+      row :member_number
       row("Adhésion") { |u| u.membership_type&.humanize }
-      row("Cotisation payée ?") { |u| status_tag(u.paid ? "Oui" : "Non", u.paid ? :ok : :error) }
+      row("Cotisation payée ?") do |u|
+        content_tag :span, (u.paid ? "Oui" : "Non"), 
+                    class: "status #{u.paid ? 'paid' : 'unpaid'}"
+      end
       row :created_at
       row :updated_at
     end
