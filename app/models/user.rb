@@ -7,10 +7,10 @@ class User < ApplicationRecord
   validates :paid, inclusion: { in: [ true, false ], message: "doit être précisé (cotisation payée ou non)" }
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  TEAMS = %w[ticketing projection communication other].freeze
+  TEAMS = %w[ticketing projection communication movie_selection other].freeze
 
   serialize :teams, type: Array, coder: JSON
-    
+
   def staffed_programmations_by_role(role)
     staffed_programmations.where(programmation_staff: { role: role })
   end
