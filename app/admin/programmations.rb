@@ -40,7 +40,7 @@ ActiveAdmin.register Programmation do
     f.inputs "Équipe" do
       if User.count > 0
         f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
-          staff.input :user, label: "Membre", as: :select, collection: User.all.map { |u| [ u.full_name, u.id ] }
+          staff.input :user, label: "Membre", as: :select, collection: User.where.not(teams: []).map { |u| [ "#{u.first_name} #{u.last_name} - #{u.teams.to_sentence}", u.id ] }
           staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ k.humanize, k ] }
         end
       else
