@@ -1,10 +1,10 @@
 <div class="max-w-2xl mx-auto p-6">
-  <h1 class="text-2xl font-bold mb-6">Acheter des billets pour <%= @programmation.title %></h1>
+  <h1 class="text-2xl font-bold mb-6">Acheter des billets pour <%= @programmation.movie.title %></h1>
 
   <div class="bg-white shadow rounded-lg p-6 mb-6">
     <div class="flex items-center gap-4 mb-6">
-      <% if @programmation.poster_url.present? %>
-        <%= image_tag @programmation.poster_url, class: "w-24 h-36 object-cover rounded" %>
+      <% if @programmation.movie.poster_url.present? %>
+        <%= image_tag @programmation.movie.poster_url, class: "w-24 h-36 object-cover rounded" %>
       <% end %>
       <div>
         <h2 class="text-xl font-semibold"><%= @programmation.movie.title %></h2>
