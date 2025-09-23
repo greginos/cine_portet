@@ -6,8 +6,8 @@ ActiveAdmin.register ProgrammationStaff do
 
   form do |f|
     f.inputs do
-      f.input :user, as: :select, collection: User.where.not(teams: []).map { |u| [ "#{u.first_name} #{u.last_name} - #{u.teams}", u.id ] }
-      f.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ ProgrammationStaff::ROLES[k.to_sym], v ] }
+      f.input :user, as: :select, collection: User.volunteers.map { |u| [ "#{u.first_name} #{u.last_name} - #{u.teams}", u.id ] }
+      f.input :role, as: :select, collection: ProgrammationStaff.roles.keys.map { |k| I18n.t("programmation_staff.roles.#{k}") }
     end
     f.actions
   end

@@ -7,7 +7,23 @@ class User < ApplicationRecord
   validates :paid, inclusion: { in: [ true, false ], message: "doit être précisé (cotisation payée ou non)" }
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
-  TEAMS = %w[ticketing projection communication movie_selection other].freeze
+  scope :volunteers, -> { where.not(teams: [ nil, "", [] ]) }
+  scope :members, -> { where(teams: [ nil, "", [] ]) }
+
+  def volunteer?
+    teams.present? && teams.any?
+  end
+
+  def member?
+    !volunteer?
+  end
+
+  def role
+    volunteer? ? "volunteer" : "member"
+  end
+
+
+  TEAMS = %w[ticketing projection communication movie_selection opener other].freeze
 
   serialize :teams, type: Array, coder: JSON
 
@@ -62,6 +78,8 @@ class User < ApplicationRecord
       zip_code
       city
       country
+      member_number
+      teams
     ]
   end
 

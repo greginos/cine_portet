@@ -4,14 +4,12 @@ class ProgrammationStaff < ApplicationRecord
   belongs_to :programmation
   belongs_to :user
 
-  # Définition des rôles avec leurs valeurs numériques
   ROLES = {
-    projectionist: "Projectionniste",
-    opener: "Ouvreur",
-    ticket_seller: "Vendeur de billets"
+    projectionist: "Projection",
+    opener: "Entrée / Sortie matériel",
+    ticket_seller: "Billetterie"
   }.freeze
 
-  # Définition de l'enum avec les valeurs numériques
   enum :role, {
     projectionist: 0,
     opener: 1,

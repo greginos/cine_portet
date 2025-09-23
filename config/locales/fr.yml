@@ -29,10 +29,115 @@
 
 fr:
   hello: "Bonjour le monde"
+  active_admin:
+    dashboard: "Tableau de bord"
+    dashboard_welcome:
+      welcome: "Bienvenue dans Active Admin"
+      call_to_action: "Consultez %{link} pour plus d'informations sur la façon de personnaliser cette page."
+      link: "la documentation"
+    view: "Voir"
+    edit: "Modifier"
+    delete: "Supprimer"
+    delete_confirmation: "Êtes-vous sûr de vouloir supprimer ceci ?"
+    new_model: "Nouveau %{model}"
+    edit_model: "Modifier %{model}"
+    delete_model: "Supprimer %{model}"
+    details: "Détails de %{model}"
+    cancel: "Annuler"
+    empty: "Vide"
+    previous: "Précédent"
+    next: "Suivant"
+    download: "Télécharger :"
+    has_many_new: "Ajouter un nouveau %{model}"
+    has_many_delete: "Supprimer"
+    filter: "Filtrer"
+    clear_filters: "Effacer les filtres"
+    search_field: "Rechercher %{field}"
+    equal_to: "Égal à"
+    greater_than: "Supérieur à"
+    less_than: "Inférieur à"
+    main_content: "Veuillez implémenter %{model}#main_content pour afficher du contenu."
+    logout: "Déconnexion"
+    powered_by: "Propulsé par %{active_admin} %{version}"
+    sidebars:
+      filters: "Filtres"
+    pagination:
+      empty: "Aucun %{model} trouvé"
+      one: "Affichage de <strong>1</strong> %{model}"
+      one_page: "Affichage de <strong>%{n}</strong> %{model}"
+      multiple: "Affichage de %{model} <strong>%{from}&nbsp;-&nbsp;%{to}</strong> sur <strong>%{total}</strong> au total"
+      multiple_without_total: "Affichage de %{model} <strong>%{from}&nbsp;-&nbsp;%{to}</strong>"
+      entry:
+        one: "entrée"
+        other: "entrées"
+    any: "Tous"
+    blank_slate:
+      content: "Il n'y a pas encore de %{resource_name}."
+      link: "En créer un"
+    dropdown_actions:
+      button_label: "Actions"
+    batch_actions:
+      button_label: "Actions groupées"
+      default_confirmation: "Êtes-vous sûr de vouloir faire cela ?"
+      delete_confirmation: "Êtes-vous sûr de vouloir supprimer ces %{plural_model} ?"
+      succesfully_destroyed:
+        one: "%{model} supprimé avec succès"
+        other: "%{count} %{plural_model} supprimés avec succès"
+      selection_toggle_explanation: "(Inverser la sélection)"
+      link: "Créer un"
+      action_label: "%{title} les éléments sélectionnés"
+      labels:
+        destroy: "Supprimer"
+    comments:
+      created_at: "Créé le"
+      resource_type: "Type de ressource"
+      author_type: "Type d'auteur"
+      body: "Corps"
+      author: "Auteur"
+      title: "Commentaires"
+      add: "Ajouter un commentaire"
+      resource: "Ressource"
+      no_comments_yet: "Aucun commentaire pour le moment."
+      author_missing: "Anonyme"
+      title_content: "Commentaires (%{count})"
+      errors:
+        empty_text: "Commentaire non sauvegardé, le texte était vide."
+    devise:
+      username:
+        title: "Nom d'utilisateur"
+      email:
+        title: "Email"
+      subdomain:
+        title: "Sous-domaine"
+      password:
+        title: "Mot de passe"
+      sign_up:
+        title: "S'inscrire"
+        submit: "S'inscrire"
+      login:
+        title: "Connexion"
+        remember_me: "Se souvenir de moi"
+        submit: "Se connecter"
+      reset_password:
+        title: "Mot de passe oublié ?"
+        submit: "Réinitialiser mon mot de passe"
+      change_password:
+        title: "Changer votre mot de passe"
+        submit: "Changer mon mot de passe"
+      unlock:
+        title: "Renvoyer les instructions de déverrouillage"
+        submit: "Renvoyer les instructions de déverrouillage"
+      resend_confirmation_instructions:
+        title: "Renvoyer les instructions de confirmation"
+        submit: "Renvoyer les instructions de confirmation"
   activerecord:
     models:
       programmation: "Programmation"
       programmations: "Programmations"
+      admin_user: "Administrateur"
+      users: "Utilisateurs"
+      volunteers: "Volontaires"
+      movie: "Film"
     attributes:
       programmation:
         imdb_id: "Identifiant IMDB"
@@ -47,9 +152,9 @@ fr:
         updated_at: "Mis à jour le"
       programmation_staff:
         roles:
-          projectionist: "Projectionniste"
-          opener: "Ouvreur"
-          ticket_seller: "Vendeur de billets"
+          projectionist: "Projection"
+          opener: "Entrée / Sortie matériel"
+          ticket_seller: "Billetterie"
       user:
         first_name: "Prénom"
         last_name: "Nom"
@@ -78,8 +183,14 @@ fr:
     minute: "Minute"
     second: "Seconde"
   teams:
-        ticketing: "Billetterie"
-        projection: "Projection"
-        communication: "Communication"
-        movie_selection: "Sélection des films"
-        other: "Autre"
+    ticketing: "Billetterie"
+    projection: "Projection"
+    communication: "Communication"
+    movie_selection: "Sélection des films"
+    opener: "Entrée / Sortie matériel"
+    other: "Autre"
+  programmation_staff:
+    roles:
+      projectionist: "Projection"
+      opener: "Entrée / Sortie matériel"
+      ticket_seller: "Billetterie"

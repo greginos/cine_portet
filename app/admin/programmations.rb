@@ -1,5 +1,5 @@
 ActiveAdmin.register Programmation do
-  menu priority: 1
+  menu priority: 2
 
   permit_params :imdb_id, :time, :max_tickets, :normal_price, :member_price, :reduced_price,
                 programmation_staffs_attributes: [ :id, :user_id, :role, :_destroy ]
@@ -40,8 +40,12 @@ ActiveAdmin.register Programmation do
     f.inputs "Équipe" do
       if User.count > 0
         f.has_many :programmation_staffs, allow_destroy: true, heading: false do |staff|
-          staff.input :user, label: "Membre", as: :select, collection: User.where.not(teams: []).map { |u| [ "#{u.first_name} #{u.last_name} - #{u.teams.to_sentence}", u.id ] }
-          staff.input :role, as: :select, collection: ProgrammationStaff.roles.map { |k, v| [ k.humanize, k ] }
+          staff.input :user, label: "Membre", as: :select, collection: User.volunteers.map { |u| [ "#{u.first_name} #{u.last_name} - #{u.teams.to_sentence}", u.id ] }
+          staff.input :role, as: :select,
+          collection: ProgrammationStaff.roles.keys.map { |k|
+            [ I18n.t("programmation_staff.roles.#{k}"), k ]
+          },
+          label: "Rôle"
         end
       else
         div class: "flash flash_warning" do

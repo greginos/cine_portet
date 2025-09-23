@@ -1,5 +1,5 @@
 ActiveAdmin.register Movie do
-  menu priority: 2
+  menu priority: 3
 
   permit_params :title, :description, :duration, :genre, :director, :cast, :poster_url, :imdb_id
 
