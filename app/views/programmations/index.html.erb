@@ -10,11 +10,14 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <% @programmations.each do |programmation| %>
       <div class="bg-white shadow rounded-lg overflow-hidden">
-        <% if programmation.movie&.poster_url.present? %>
-          <%= image_tag programmation.movie.poster_url, class: "w-full h-64 object-cover" %>
-        <% else %>
-          <%= image_tag "poster_tbd.jpg", class: "w-full h-64 object-cover" %>
-        <% end %>
+              
+        <div class="aspect-[2/3]">
+            <% if programmation.movie&.poster_url.present? %>
+              <%= image_tag programmation.movie.poster_url, class: "w-full h-full object-contain" %>
+            <% else %>
+              <%= image_tag "poster_tbd.jpg", class: "w-full h-full object-contain" %>
+            <% end %>
+        </div>
 
         <div class="p-6">
           <% if programmation.movie.present? %>
