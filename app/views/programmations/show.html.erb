@@ -47,13 +47,17 @@
           </div>
         </div>
 
-        <% if @programmation.tickets_available? %>
+        <%
+=begin%>
+ <% if @programmation.tickets_available? %>
           <%= link_to "Acheter des billets", new_programmation_ticket_path(@programmation), class: "block w-full bg-blue-600 text-white text-center py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-lg font-medium" %>
         <% else %>
           <div class="text-center text-red-600 font-medium text-lg">
             Complet
           </div>
-        <% end %>
+        <% end %> 
+<%
+=end%>
       </div>
     </div>
 
