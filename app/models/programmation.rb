@@ -78,8 +78,6 @@ class Programmation < ApplicationRecord
     ]
   end
 
-  private
-
   def create_movie_from_imdb
     movie_details = ::MovieService.fetch_movie_details(imdb_id)
     return unless movie_details

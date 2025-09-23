@@ -85,16 +85,15 @@ ActiveAdmin.register Programmation do
       # Traiter l'IMDB ID pour obtenir le movie_id
       if programmation_params[:imdb_id].present?
         begin
-          movie = Movie.find_or_create_by_imdb_id(programmation_params[:imdb_id])
+          movie = Movie.find_or_create_by(imdb_id: programmation_params[:imdb_id])
           if movie && movie.persisted?
             programmation_params[:movie_id] = movie.id
             # Supprimer imdb_id car ce n'est pas un attribut de Programmation
             programmation_params.delete(:imdb_id)
           else
-            flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
             @programmation = Programmation.new(programmation_params)
-            render :new
-            return
+            @programmation.imdb_id = programmation_params[:imdb_id]
+            @programmation.create_movie_from_imdb
           end
         rescue => e
           Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
@@ -126,14 +125,20 @@ ActiveAdmin.register Programmation do
       # Traiter l'IMDB ID pour la mise à jour si présent
       if programmation_params[:imdb_id].present?
         begin
-          movie = Movie.find_or_create_by_imdb_id(programmation_params[:imdb_id])
+          movie = Movie.find_or_create_by(imdb_id: programmation_params[:imdb_id])
           if movie && movie.persisted?
             programmation_params[:movie_id] = movie.id
             programmation_params.delete(:imdb_id)
           else
-            flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
-            render :edit
-            return
+            @programmation.imdb_id = programmation_params[:imdb_id]
+            @programmation.create_movie_from_imdb
+            if @programmation.save
+              nil
+            else
+              flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
+              render :edit
+              return
+            end
           end
         rescue => e
           Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
