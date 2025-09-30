@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
 
   root "home#index"
+  resources :movies, only: [ :show ]
 
   resources :programmations, only: [ :index, :show ] do
     resources :tickets, only: [ :new, :create, :show ] do

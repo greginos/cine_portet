@@ -1,26 +1,25 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <div class="bg-white shadow rounded-lg overflow-hidden">
     <div class="md:flex">
-      <% if @programmation.movie.poster_url.present? %>
+      <% if @movie.poster_url.present? %>
         <div class="md:w-1/3">
-          <%= image_tag @programmation.movie.poster_url, class: "w-full h-full object-cover" %>
+          <%= image_tag @movie.poster_url, class: "w-full h-full object-cover" %>
         </div>
       <% end %>
 
       <div class="p-6 md:w-2/3">
-        <h1 class="text-3xl font-bold mb-4"><%= @programmation.movie.title %></h1>
+        <h1 class="text-3xl font-bold mb-4"><%= @movie.title %></h1>
 
         <div class="text-gray-600 mb-6">
-          <p class="mb-2"><%= @programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
-          <p class="mb-2"><%= @programmation.movie.duration %> minutes</p>
-          <p class="mb-2"><%= @programmation.movie.genre %></p>
-          <% if @programmation.movie.director["name"].present? %>
-            <p class="mb-2">Réalisé par <%= @programmation.movie.director["name"] %></p>
+          <p class="mb-2"><%= @movie.duration %> minutes</p>
+          <p class="mb-2"><%= @movie.genre %></p>
+          <% if @movie.director["name"].present? %>
+            <p class="mb-2">Réalisé par <%= @movie.director["name"] %></p>
           <% end %>
         </div>
 
         <div class="prose max-w-none mb-6">
-          <%= @programmation.movie.description %>
+          <%= @movie.description %>
         </div>
 
         <div class="mb-6">
@@ -61,11 +60,11 @@
       </div>
     </div>
 
-    <% if @programmation.movie.actors.any? %>
+    <% if @movie.cast.any? %>
       <div class="border-t border-gray-200 p-6">
         <h2 class="text-xl font-semibold mb-4">Distribution</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <% @programmation.actors.each do |actor| %>
+          <% @movie.cast.each do |actor| %>
             <div class="text-center">
               <% if actor["profile_picture"].present? %>
                 <%= image_tag actor["profile_picture"], class: "w-20 h-20 rounded-full mx-auto mb-2 object-cover" %>

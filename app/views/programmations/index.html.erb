@@ -13,12 +13,13 @@
               
         <div class="aspect-[2/3]">
             <% if programmation.movie&.poster_url.present? %>
-              <%= image_tag programmation.movie.poster_url, class: "w-full h-full object-contain" %>
+              <%= link_to movie_path(programmation.movie, programmation: programmation) do %>
+                <%= image_tag programmation.movie.poster_url, class: "w-full h-full object-contain" %>
+              <% end %>
             <% else %>
               <%= image_tag "poster_tbd.jpg", class: "w-full h-full object-contain" %>
             <% end %>
         </div>
-
         <div class="p-6">
           <% if programmation.movie.present? %>
             <h2 class="text-xl font-semibold mb-2"><%= programmation.movie.title %></h2>
