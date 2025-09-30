@@ -73,7 +73,7 @@
         </div>
     <% end %>
 
-    <% if @movie.cast.any? %>
+    <% if @movie.cast.present? %>
       <div class="border-t border-gray-200 p-6">
         <h2 class="text-xl font-semibold mb-4">Distribution</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
