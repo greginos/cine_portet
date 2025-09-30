@@ -1,7 +1,7 @@
 ActiveAdmin.register Movie do
   menu priority: 3
 
-  permit_params :title, :description, :duration, :genre, :director, :cast, :poster_url, :imdb_id
+  permit_params :title, :description, :duration, :genre, :director, :cast, :poster_url, :imdb_id, :url
 
   index do
     selectable_column
@@ -39,6 +39,7 @@ ActiveAdmin.register Movie do
       end
       row :created_at
       row :updated_at
+      row :url
     end
 
     panel "Séances" do
