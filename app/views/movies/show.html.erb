@@ -74,19 +74,26 @@
     <% end %>
 
     <% if @movie.cast.present? %>
-      <div class="border-t border-gray-200 p-6">
-        <h2 class="text-xl font-semibold mb-4">Distribution</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <% @movie.cast.each do |actor| %>
-            <div class="text-center">
-              <% if actor["profile_picture"].present? %>
-                <%= image_tag actor["profile_picture"], class: "w-20 h-20 rounded-full mx-auto mb-2 object-cover" %>
-              <% end %>
-              <p class="text-sm font-medium"><%= actor["name"] %></p>
-            </div>
-          <% end %>
-        </div>
+      <% begin %>
+  <% cast_array = eval(@movie.cast) %>
+  <% if cast_array.is_a?(Array) && cast_array.any? %>
+    <div class="border-t border-gray-200 p-6">
+      <h2 class="text-xl font-semibold mb-4">Distribution</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% cast_array.each do |actor| %>
+          <div class="text-center">
+            <% if actor["profile_picture"] %>
+              <img src="<%= actor["profile_picture"] %>" alt="<%= actor["name"] %>" class="w-full rounded-lg mb-2">
+            <% end %>
+            <p class="font-medium"><%= actor["name"] %></p>
+          </div>
+        <% end %>
       </div>
+    </div>
+  <% end %>
+<% rescue => e %>
+  <!-- Erreur de parsing du cast -->
+<% end %>
     <% end %>
   </div>
 </div> 
