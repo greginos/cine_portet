@@ -59,6 +59,19 @@
 =end%>
       </div>
     </div>
+    <% if @movie.url.present? %>
+        <div class="border-t border-gray-200 p-6">
+          <div class="relative w-full" style="padding-bottom: 60%;"> <!-- 4:3 ratio -->
+            <iframe 
+              src="<%= embed_url(@movie.url) %>" 
+              class="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+              frameborder="0" 
+              allowfullscreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+          </div>
+        </div>
+    <% end %>
 
     <% if @movie.cast.any? %>
       <div class="border-t border-gray-200 p-6">

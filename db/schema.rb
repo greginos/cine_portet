@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_22_193342) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_30_201321) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,6 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_193342) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "imdb_id"
+    t.string "url"
     t.index ["genre"], name: "index_movies_on_genre"
     t.index ["imdb_id"], name: "index_movies_on_imdb_id", unique: true
     t.index ["title"], name: "index_movies_on_title"
