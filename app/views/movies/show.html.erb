@@ -13,8 +13,9 @@
         <div class="text-gray-600 mb-6">
           <p class="mb-2"><%= @movie.duration %> minutes</p>
           <p class="mb-2"><%= @movie.genre %></p>
-          <% if @movie.director["name"].present? %>
-            <p class="mb-2">Réalisé par <%= @movie.director["name"] %></p>
+          <% director = @movie.director["name"] != 'name' ? @movie.director["name"] : eval(@movie.director)['name'] %>
+            <% if director.present? %>
+            <p class="mb-2">Réalisé par <%= director %></p>
           <% end %>
         </div>
 
