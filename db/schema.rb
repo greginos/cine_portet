@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_30_201321) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_194241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,8 +78,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_201321) do
     t.decimal "member_price", precision: 8, scale: 2
     t.decimal "reduced_price", precision: 8, scale: 2
     t.bigint "movie_id"
+    t.bigint "session_id"
     t.index ["imdb_id"], name: "index_programmations_on_imdb_id"
     t.index ["movie_id"], name: "index_programmations_on_movie_id"
+    t.index ["session_id"], name: "index_programmations_on_session_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "end_date"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -126,5 +137,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_30_201321) do
   add_foreign_key "programmation_staffs", "programmations"
   add_foreign_key "programmation_staffs", "users"
   add_foreign_key "programmations", "movies"
+  add_foreign_key "programmations", "sessions"
   add_foreign_key "tickets", "programmations"
 end

@@ -4,12 +4,17 @@ class Programmation < ApplicationRecord
   validates :normal_price, :member_price, :reduced_price, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   belongs_to :movie, optional: true
+  belongs_to :session, optional: true
+
   has_many :programmation_staffs, dependent: :destroy
   has_many :staff_members, through: :programmation_staffs, source: :user
   has_many :tickets, dependent: :destroy
   accepts_nested_attributes_for :programmation_staffs, allow_destroy: true, reject_if: :all_blank
 
   before_validation :create_movie_from_imdb, if: -> { imdb_id.present? && movie.nil? }
+
+  scope :in_session, ->(session) { where(session: session) }
+  scope :without_session, -> { where(session_id: nil) }
 
   def projectionists
     staff_members.joins(:programmation_staffs).where(programmation_staffs: { role: :projectionist })
@@ -65,6 +70,7 @@ class Programmation < ApplicationRecord
       reduced_price
       created_at
       movie_id
+      session_id
     ]
   end
 
@@ -75,6 +81,7 @@ class Programmation < ApplicationRecord
       staff_members
       tickets
       movie
+      session
     ]
   end
 
