@@ -8,8 +8,8 @@ primary_region = 'cdg'
 console_command = '/rails/bin/rails console'
 
 [build]
-  builder = "flyio/builder"
-  
+  dockerfile = "Dockerfile"
+    
 [http_service]
   internal_port = 8080
   force_https = true
