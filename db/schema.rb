@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_09_194241) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_20_212731) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,6 +84,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_194241) do
     t.index ["session_id"], name: "index_programmations_on_session_id"
   end
 
+  create_table "session_staffs", force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id", "user_id", "position"], name: "index_session_staffs_on_session_id_and_user_id_and_position", unique: true
+    t.index ["session_id"], name: "index_session_staffs_on_session_id"
+    t.index ["user_id"], name: "index_session_staffs_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.string "name"
     t.date "start_date"
@@ -138,5 +149,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_194241) do
   add_foreign_key "programmation_staffs", "users"
   add_foreign_key "programmations", "movies"
   add_foreign_key "programmations", "sessions"
+  add_foreign_key "session_staffs", "sessions"
+  add_foreign_key "session_staffs", "users"
   add_foreign_key "tickets", "programmations"
 end

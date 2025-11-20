@@ -5,6 +5,20 @@ class Session < ApplicationRecord
 
   has_many :programmations, dependent: :nullify
   has_many :movies, through: :programmations
+  has_many :session_staffs, dependent: :destroy
+  has_many :volunteers, through: :session_staffs, source: :user
+
+  # Associations spécifiques pour début et fin
+  has_many :start_session_staffs, -> { where(position: :start_session) },
+           class_name: "SessionStaff"
+  has_many :start_volunteers, through: :start_session_staffs, source: :user
+
+  has_many :end_session_staffs, -> { where(position: :end_session) },
+           class_name: "SessionStaff"
+  has_many :end_volunteers, through: :end_session_staffs, source: :user
+
+  accepts_nested_attributes_for :session_staffs, allow_destroy: true
+
 
   scope :current, -> { where("start_date <= ? AND end_date >= ?", Date.current, Date.current) }
   scope :upcoming, -> { where("start_date > ?", Date.current) }

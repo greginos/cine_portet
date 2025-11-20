@@ -201,3 +201,7 @@ fr:
     upcoming: "À venir"
     past: "Passée"
     current: "En cours"
+  session_staff:
+    positions:
+      start_session: "Ouverture de session"
+      end_session: "Clôture de session"
