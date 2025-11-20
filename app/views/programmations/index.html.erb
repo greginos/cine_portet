@@ -27,7 +27,7 @@
             <h2 class="text-xl font-semibold mb-2">Annonce à venir</h2>
           <% end %>
           <div class="text-gray-600 mb-4">
-            <p><%= programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
+            <p><%=  I18n.l(programmation.time, format: :long) %></p>
             <% if programmation.movie.present? %>
             <p><%= programmation.movie.duration %> minutes</p>
             <p><%= programmation.movie.genre %></p>

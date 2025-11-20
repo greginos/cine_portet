@@ -194,3 +194,6 @@ fr:
       projectionist: "Projection"
       opener: "Entrée / Sortie matériel"
       ticket_seller: "Billetterie"
+  time:
+    formats:
+      long: "%d %B %Y, à %Hh%M"
