@@ -1,0 +1,11 @@
+<div class="bg-white shadow rounded-lg overflow-hidden">
+  <% if programmation.movie.poster_url.present? %>
+    <%= image_tag programmation.movie.poster_url, class: "w-full h-48 object-cover" %>
+  <% end %>
+
+  <div class="p-4">
+    <h2 class="text-xl font-bold mb-2"><%= programmation.movie.title %></h2>
+    <p class="text-gray-600 text-sm"><%= I18n.l(programmation.time, format: :long) %></p>
+    <p class="text-gray-600 text-sm"><%= programmation.movie.duration %> minutes</p>
+  </div>
+</div>

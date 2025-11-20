@@ -13,7 +13,20 @@
       <%= link_to "Voir la programmation", programmations_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
     </div>
   </section>
-
+<!-- Upcoming sessions -->
+<section>
+<% @session = Session.upcoming %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">Prochains films</h2>
+    </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% Programmation.where(session: @session).each do |programmation| %>
+          <%= render partial: "programmations/programmation_card", locals: { programmation: programmation } %>
+        <% end %>
+      </div>
+    </div>
+</section>
   <!-- À propos Section -->
   <section id="a-propos" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -8,7 +8,7 @@
       <% end %>
       <div>
         <h2 class="text-xl font-semibold"><%= @programmation.movie.title %></h2>
-        <p class="text-gray-600"><%= @programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
+        <p class="text-gray-600"><%= I18n.l(@programmation.time, format: :long) %></p>
         <% if @programmation.tickets_remaining.present? %>
           <p class="text-sm text-gray-500"><%= @programmation.tickets_remaining %> places restantes</p>
         <% end %>

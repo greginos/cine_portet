@@ -1,64 +1,54 @@
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<%= render @programmation %>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
   <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="md:flex">
-      <% if @programmation.movie.poster_url.present? %>
-        <div class="md:w-1/3">
-          <%= image_tag @programmation.movie.poster_url, class: "w-full h-full object-cover" %>
-        </div>
+    <div class="p-6">
+      <p class="mb-2 text-gray-600"><%= @programmation.movie.genre %></p>
+      <% if @programmation.movie.director["name"].present? %>
+        <p class="mb-2 text-gray-600">Réalisé par <%= @programmation.movie.director["name"] %></p>
       <% end %>
 
-      <div class="p-6 md:w-2/3">
-        <h1 class="text-3xl font-bold mb-4"><%= @programmation.movie.title %></h1>
+      <div class="prose max-w-none mb-6">
+        <%= @programmation.movie.description %>
+      </div>
 
-        <div class="text-gray-600 mb-6">
-          <p class="mb-2"><%= @programmation.time.strftime("%d/%m/%Y à %H:%M") %></p>
-          <p class="mb-2"><%= @programmation.movie.duration %> minutes</p>
-          <p class="mb-2"><%= @programmation.movie.genre %></p>
-          <% if @programmation.movie.director["name"].present? %>
-            <p class="mb-2">Réalisé par <%= @programmation.movie.director["name"] %></p>
+      <div class="mb-6">
+        <h2 class="text-xl font-semibold mb-4">Tarifs</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <% if @programmation.normal_price.present? %>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-medium mb-1">Normal</h3>
+              <p class="text-2xl font-bold"><%= number_to_currency(@programmation.normal_price, unit: "€") %></p>
+            </div>
+          <% end %>
+
+          <% if @programmation.member_price.present? %>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-medium mb-1">Adhérent</h3>
+              <p class="text-2xl font-bold"><%= number_to_currency(@programmation.member_price, unit: "€") %></p>
+            </div>
+          <% end %>
+
+          <% if @programmation.reduced_price.present? %>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-medium mb-1">Réduit</h3>
+              <p class="text-2xl font-bold"><%= number_to_currency(@programmation.reduced_price, unit: "€") %></p>
+            </div>
           <% end %>
         </div>
+      </div>
 
-        <div class="prose max-w-none mb-6">
-          <%= @programmation.movie.description %>
-        </div>
-
-        <div class="mb-6">
-          <h2 class="text-xl font-semibold mb-4">Tarifs</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <% if @programmation.normal_price.present? %>
-              <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-medium mb-1">Normal</h3>
-                <p class="text-2xl font-bold"><%= number_to_currency(@programmation.normal_price, unit: "€") %></p>
-              </div>
-            <% end %>
-            <% if @programmation.member_price.present? %>
-              <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-medium mb-1">Adhérent</h3>
-                <p class="text-2xl font-bold"><%= number_to_currency(@programmation.member_price, unit: "€") %></p>
-              </div>
-            <% end %>
-            <% if @programmation.reduced_price.present? %>
-              <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="font-medium mb-1">Réduit</h3>
-                <p class="text-2xl font-bold"><%= number_to_currency(@programmation.reduced_price, unit: "€") %></p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-
+      <%# Section billets (commentée pour l'instant)
+      <% if @programmation.tickets_available? %>
         <%
 =begin%>
- <% if @programmation.tickets_available? %>
-          <%= link_to "Acheter des billets", new_programmation_ticket_path(@programmation), class: "block w-full bg-blue-600 text-white text-center py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-lg font-medium" %>
-        <% else %>
-          <div class="text-center text-red-600 font-medium text-lg">
-            Complet
-          </div>
-        <% end %> 
+ <%= link_to "Acheter des billets", new_programmation_ticket_path(@programmation), class: "block w-full bg-blue-600 text-white text-center py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-lg font-medium" %>
+      <% else %>
+        <div class="text-center text-red-600 font-medium text-lg">Complet</div>
+      <% end %>
+      %> 
 <%
 =end%>
-      </div>
     </div>
 
     <% if @programmation.movie.actors.any? %>
@@ -77,4 +67,4 @@
       </div>
     <% end %>
   </div>
-</div> 
+</div>

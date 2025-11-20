@@ -197,3 +197,7 @@ fr:
   time:
     formats:
       long: "%d %B %Y, à %Hh%M"
+  session:
+    upcoming: "À venir"
+    past: "Passée"
+    current: "En cours"
