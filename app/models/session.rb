@@ -8,6 +8,7 @@ class Session < ApplicationRecord
 
   scope :current, -> { where("start_date <= ? AND end_date >= ?", Date.current, Date.current) }
   scope :upcoming, -> { where("start_date > ?", Date.current) }
+  scope :current_or_upcoming, -> { current.first || upcoming.first }
   scope :past, -> { where("end_date < ?", Date.current) }
   scope :ordered, -> { order(start_date: :desc) }
 
