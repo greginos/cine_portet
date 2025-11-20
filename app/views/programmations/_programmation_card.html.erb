@@ -1,6 +1,12 @@
 <div class="bg-white shadow rounded-lg overflow-hidden">
   <% if programmation.movie.poster_url.present? %>
-    <%= image_tag programmation.movie.poster_url, class: "w-full h-48 object-cover" %>
+    <div class="relative h-72 overflow-hidden">
+      <%# Image de fond floutée %>
+      <img src="<%= programmation.movie.poster_url %>" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50 scale-110" alt="">
+      
+      <%# Image principale %>
+      <img src="<%= programmation.movie.poster_url %>" class="relative z-10 w-full h-full object-contain p-4" alt="<%= programmation.movie.title %>">
+    </div>
   <% end %>
 
   <div class="p-4">
