@@ -14,18 +14,44 @@
     </div>
   </section>
 <!-- Upcoming sessions -->
-<section>
 <% @session = Session.current_or_upcoming %>
+<section>
+<% if @session %>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Programmation du <%= I18n.l(@session.start_date, format: :short) %> au <%= I18n.l(@session.end_date, format: :short) %></h2>
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        Programmation du <%= I18n.l(@session.start_date, format: :short) %> au <%= I18n.l(@session.end_date, format: :short) %>
+      </h2>
     </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% Programmation.where(session: @session).order(:time).each do |programmation| %>
-          <%= render partial: "programmations/programmation_card", locals: { programmation: programmation } %>
-        <% end %>
+
+    <!-- Événements en pleine largeur -->
+    <% @events.each do |event| %>
+      <div class="mb-8">
+        <%= render partial: "events/event_card_full", locals: { event: event } %>
       </div>
+    <% end %>
+
+    <!-- Programmations en grille -->
+    <% if @events.any? %>
+      <div class="mt-12 mb-6">
+        <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2">
+          Projections
+        </h3>
+      </div>
+    <% end %>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @programmations.each do |programmation| %>
+        <%= render partial: "programmations/programmation_card", locals: { programmation: programmation } %>
+      <% end %>
     </div>
+  </div>
+<% else %>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucune programmation disponible</h2>
+    <p class="text-gray-600">Revenez bientôt pour découvrir notre prochaine saison !</p>
+  </div>
+<% end %>
 </section>
   <!-- À propos Section -->
   <section id="a-propos" class="py-16 bg-white">

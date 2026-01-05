@@ -9,6 +9,8 @@ class Programmation < ApplicationRecord
   has_many :programmation_staffs, dependent: :destroy
   has_many :staff_members, through: :programmation_staffs, source: :user
   has_many :tickets, dependent: :destroy
+  has_many :events, dependent: :nullify
+  
   accepts_nested_attributes_for :programmation_staffs, allow_destroy: true, reject_if: :all_blank
 
   before_validation :create_movie_from_imdb, if: -> { imdb_id.present? && movie.nil? }

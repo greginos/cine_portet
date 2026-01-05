@@ -1,0 +1,103 @@
+<div style="background: linear-gradient(to right, #fef3c7, #fed7aa); border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); overflow: hidden; border-left: 8px solid #eab308; transition: box-shadow 0.3s;">
+  <div style="padding: 2rem;">
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Partie principale -->
+      <div style="flex: 1;">
+        <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="flex: 1; min-width: 300px;">
+            <!-- Badge événement -->
+            <span style="display: inline-flex; align-items: center; padding: 0.75rem 1rem; border-radius: 9999px; font-size: 1rem; font-weight: bold; background-color: #eab308; color: white; margin-bottom: 1rem;">
+              <svg style="width: 1.25rem; height: 1.25rem; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+              ÉVÉNEMENT SPÉCIAL
+            </span>
+            
+            <!-- Titre -->
+            <h3 style="font-size: 2rem; font-weight: bold; color: #111827; margin-bottom: 1rem;">
+              <%= event.title %>
+            </h3>
+            
+            <!-- Date et heure -->
+            <div style="display: flex; align-items: center; color: #374151; margin-bottom: 1.5rem;">
+              <svg style="width: 1.5rem; height: 1.5rem; margin-right: 0.75rem; color: #ca8a04;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span style="font-size: 1.25rem; font-weight: 600;">
+                <%= l(event.start_time, format: :long) %>
+              </span>
+            </div>
+          </div>
+          
+          <% if event.linked_to_screening? %>
+            <span style="display: inline-flex; align-items: center; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 500; background-color: #3b82f6; color: white;">
+              <svg style="width: 1rem; height: 1rem; margin-right: 0.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+              </svg>
+              Lié à une projection
+            </span>
+          <% end %>
+        </div>
+        
+        <!-- Description -->
+        <% if event.description.present? %>
+          <div style="color: #374151; font-size: 1.125rem; line-height: 1.75;">
+            <%= simple_format(event.description) %>
+          </div>
+        <% end %>
+      </div>
+      
+      <!-- Projection associée -->
+      <% if event.programmation&.movie %>
+        <div style="background-color: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb;">
+          <h4 style="font-size: 0.875rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
+            Projection associée
+          </h4>
+          
+          <div style="display: flex; gap: 1rem; align-items: flex-start;">
+            <% if event.programmation.movie.poster_url.present? %>
+              <%= image_tag event.programmation.movie.poster_url, 
+                            alt: event.programmation.movie.title,
+                            style: "width: 6rem; height: 8rem; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);" %>
+            <% end %>
+            
+            <div style="flex: 1;">
+              <h5 style="font-weight: bold; color: #111827; font-size: 1.125rem; margin-bottom: 0.5rem;">
+                <%= event.programmation.movie.title %>
+              </h5>
+              
+              <div style="display: flex; align-items: center; color: #4b5563; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                <svg style="width: 1rem; height: 1rem; margin-right: 0.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <%= l(event.programmation.time, format: :short) %>
+              </div>
+              
+              <% if event.programmation.movie.duration %>
+                <div style="display: flex; align-items: center; color: #4b5563; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                  <svg style="width: 1rem; height: 1rem; margin-right: 0.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                  </svg>
+                  <%= event.programmation.movie.duration %> min
+                </div>
+              <% end %>
+              
+              <% if event.programmation.movie.genre %>
+                <span style="display: inline-block; margin-top: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; font-weight: 500; background-color: #f3f4f6; color: #374151; border-radius: 0.25rem;">
+                  <%= event.programmation.movie.genre %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+          
+          <% if event.programmation.movie.description %>
+            <p style="margin-top: 1rem; font-size: 0.875rem; color: #4b5563; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+              <%= event.programmation.movie.description %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

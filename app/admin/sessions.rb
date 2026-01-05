@@ -38,6 +38,12 @@ ActiveAdmin.register Session do
                 notice: "✓ #{count} programmation(s) liée(s) à la session '#{resource.name}'"
   end
 
+  member_action :link_orphan_events, method: :post do
+    count = resource.link_orphan_events
+    redirect_to admin_session_path(resource),
+                notice: "✓ #{count} événement(s) lié(s) à la session '#{resource.name}'"
+  end
+
   collection_action :link_all_orphans, method: :post do
     total = Session.link_all_orphan_programmations
     if total > 0
@@ -303,5 +309,68 @@ ActiveAdmin.register Session do
         para "Aucun bénévole assigné aux programmations de cette session."
       end
     end
+
+    # Panel des événements de la session
+panel "Événements de cette session (#{resource.events.count})" do
+if resource.events.any?
+  table_for resource.events.order(start_time: :asc) do
+    column :id
+    column "Date/Heure" do |event|
+      l event.start_time, format: :long
+    end
+    column "Titre" do |event|
+      link_to event.title, admin_event_path(event)
+    end
+    column "Type" do |event|
+      event.linked_to_screening? ? "Lié à une projection" : "Indépendant"
+    end
+    column "Projection associée" do |event|
+      if event.programmation
+        link_to event.programmation.movie&.title, admin_programmation_path(event.programmation)
+      else
+        "-"
+      end
+    end
+    column "Actions" do |event|
+      span link_to("Voir", admin_event_path(event), class: "member_link")
+      span link_to("Modifier", edit_admin_event_path(event), class: "member_link")
+    end
+  end
+else
+  para "Aucun événement lié à cette session."
+end
+end
+
+# Événements orphelins disponibles
+orphan_events = Event.without_session
+                  .where("start_time >= ? AND start_time <= ?",
+                         resource.start_date.beginning_of_day,
+                         resource.end_date.end_of_day)
+                  .order(:start_time)
+
+if orphan_events.any?
+panel "⚠️ Événements orphelins disponibles (#{orphan_events.count})" do
+  table_for orphan_events do
+    column :id
+    column "Date/Heure" do |event|
+      l event.start_time, format: :long
+    end
+    column "Titre" do |event|
+      event.title
+    end
+    column "Type" do |event|
+      event.event_type
+    end
+  end
+  div style: "margin-top: 15px;" do
+    para "Ces événements sont dans la période de la session mais ne lui sont pas encore liés."
+    link_to "Lier ces #{orphan_events.count} événement(s) à cette session",
+            link_orphan_events_admin_session_path(resource),
+            method: :post,
+            data: { confirm: "Lier #{orphan_events.count} événement(s) à '#{resource.name}' ?" },
+            class: "button"
+  end
+end
+end
   end
 end

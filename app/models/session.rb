@@ -7,6 +7,7 @@ class Session < ApplicationRecord
   has_many :movies, through: :programmations
   has_many :session_staffs, dependent: :destroy
   has_many :volunteers, through: :session_staffs, source: :user
+  has_many :events, dependent: :nullify
 
   # Associations spécifiques pour début et fin
   has_many :start_session_staffs, -> { where(position: :start_session) },
@@ -70,6 +71,22 @@ class Session < ApplicationRecord
 
     count = programmations.update_all(session_id: id)
     count
+  end
+
+  def link_orphan_events
+    Event.without_session
+         .where("start_time >= ? AND start_time <= ?",
+                start_date.beginning_of_day,
+                end_date.end_of_day)
+         .update_all(session_id: id)
+  end
+  
+  def self.link_all_orphan_events
+    total = 0
+    Session.find_each do |session|
+      total += session.link_orphan_events
+    end
+    total
   end
 
   def self.link_all_orphan_programmations
