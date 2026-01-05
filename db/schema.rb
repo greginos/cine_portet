@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_20_212731) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_05_200250) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -38,6 +38,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_212731) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "description"
+    t.datetime "start_time", null: false
+    t.bigint "programmation_id"
+    t.bigint "session_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["programmation_id"], name: "index_events_on_programmation_id"
+    t.index ["session_id", "start_time"], name: "index_events_on_session_id_and_start_time"
+    t.index ["session_id"], name: "index_events_on_session_id"
+    t.index ["start_time"], name: "index_events_on_start_time"
   end
 
   create_table "movies", force: :cascade do |t|
@@ -145,6 +159,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_20_212731) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "events", "programmations"
+  add_foreign_key "events", "sessions"
   add_foreign_key "programmation_staffs", "programmations"
   add_foreign_key "programmation_staffs", "users"
   add_foreign_key "programmations", "movies"
