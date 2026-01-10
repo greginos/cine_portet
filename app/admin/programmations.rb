@@ -83,75 +83,51 @@ ActiveAdmin.register Programmation do
   end
 
   controller do
-    def create
-      programmation_params = permitted_params[:programmation].dup
-
-      # Traiter l'IMDB ID pour obtenir le movie_id
-      if programmation_params[:imdb_id].present?
-        begin
-          movie = Movie.find_or_create_by(imdb_id: programmation_params[:imdb_id])
-          if movie && movie.persisted?
-            programmation_params[:movie_id] = movie.id
-            # Supprimer imdb_id car ce n'est pas un attribut de Programmation
-            programmation_params.delete(:imdb_id)
-          else
-            @programmation = Programmation.new(programmation_params)
-            @programmation.imdb_id = programmation_params[:imdb_id]
-            @programmation.create_movie_from_imdb
-          end
-        rescue => e
-          Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
-          flash[:error] = "Erreur lors de la récupération des informations du film"
-          @programmation = Programmation.new(programmation_params)
-          render :new
-          return
-        end
-      else
-        flash[:error] = "L'ID IMDB est requis"
-        @programmation = Programmation.new(programmation_params)
-        render :new
-        return
-      end
-
-      @programmation = Programmation.new(programmation_params)
-
-      if @programmation.save
-        redirect_to admin_programmation_path(@programmation), notice: "Programmation créée avec succès"
-      else
-        render :new
-      end
-    end
-
     def update
       @programmation = Programmation.find(params[:id])
       programmation_params = permitted_params[:programmation].dup
 
-      # Traiter l'IMDB ID pour la mise à jour si présent
       if programmation_params[:imdb_id].present?
         begin
-          movie = Movie.find_or_create_by(imdb_id: programmation_params[:imdb_id])
-          if movie && movie.persisted?
-            programmation_params[:movie_id] = movie.id
-            programmation_params.delete(:imdb_id)
-          else
-            @programmation.imdb_id = programmation_params[:imdb_id]
-            @programmation.create_movie_from_imdb
-            if @programmation.save
-              nil
+          imdb_id = programmation_params[:imdb_id]
+          movie = Movie.find_by(imdb_id: imdb_id)
+
+          if movie.nil? || movie.title.blank?
+            movie&.destroy if movie&.title.blank?
+
+            movie_details = MovieService.fetch_movie_details(imdb_id)
+
+            if movie_details
+              movie = Movie.create!(
+                title: movie_details["title"],
+                description: movie_details["description"],
+                duration: movie_details["duration"],
+                genre: movie_details["genre"],
+                director: movie_details["director"],
+                cast: movie_details["actors"],
+                poster_url: movie_details["poster_url"],
+                imdb_id: imdb_id
+              )
+
+              programmation_params[:movie_id] = movie.id
+              programmation_params.delete(:imdb_id)
             else
-              flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{programmation_params[:imdb_id]}"
+              flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{imdb_id}"
               render :edit
               return
             end
+          else
+            programmation_params[:movie_id] = movie.id
+            programmation_params.delete(:imdb_id)
           end
         rescue => e
-          Rails.logger.error "Erreur lors de la récupération du film: #{e.message}"
-          flash[:error] = "Erreur lors de la récupération des informations du film"
+          Rails.logger.error "Erreur: #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
+          flash[:error] = "Erreur: #{e.message}"
           render :edit
           return
         end
       else
-        # Si pas d'imdb_id, supprimer le paramètre pour éviter les erreurs
         programmation_params.delete(:imdb_id)
       end
 
@@ -159,6 +135,84 @@ ActiveAdmin.register Programmation do
         redirect_to admin_programmation_path(@programmation), notice: "Programmation mise à jour avec succès"
       else
         render :edit
+      end
+    end
+
+    def create
+      puts "=" * 50
+      puts "DEBUT CREATE"
+      programmation_params = permitted_params[:programmation].dup
+      puts "Params: #{programmation_params.inspect}"
+
+      if programmation_params[:imdb_id].present?
+        puts "IMDB ID présent: #{programmation_params[:imdb_id]}"
+        begin
+          imdb_id = programmation_params[:imdb_id]
+          puts "Recherche film..."
+          movie = Movie.find_by(imdb_id: imdb_id)
+          puts "Film trouvé: #{movie.inspect}"
+
+          if movie.nil? || movie.title.blank?
+            puts "Fetch nécessaire"
+            movie&.destroy if movie&.title.blank?
+
+            puts "Appel MovieService..."
+            movie_details = MovieService.fetch_movie_details(imdb_id)
+            puts "Résultat: #{movie_details.inspect}"
+
+            if movie_details
+              puts "Création du film..."
+              movie = Movie.create!(
+                title: movie_details["title"],
+                description: movie_details["description"],
+                duration: movie_details["duration"],
+                genre: movie_details["genre"],
+                director: movie_details["director"],
+                cast: movie_details["actors"],
+                poster_url: movie_details["poster_url"],
+                imdb_id: imdb_id
+              )
+              puts "Film créé avec ID: #{movie.id}"
+
+              programmation_params[:movie_id] = movie.id
+            else
+              puts "MovieService a retourné nil"
+              flash[:error] = "Impossible de récupérer le film avec l'ID IMDB: #{imdb_id}"
+              @programmation = Programmation.new
+              render :new
+              return
+            end
+          else
+            puts "Film existe déjà"
+            programmation_params[:movie_id] = movie.id
+          end
+        rescue => e
+          puts "EXCEPTION: #{e.class} - #{e.message}"
+          puts e.backtrace.first(5).join("\n")
+          Rails.logger.error "Erreur: #{e.message}"
+          Rails.logger.error e.backtrace.join("\n")
+          flash[:error] = "Erreur: #{e.message}"
+          @programmation = Programmation.new
+          render :new
+          return
+        end
+      else
+        flash[:error] = "L'ID IMDB est requis"
+        @programmation = Programmation.new
+        render :new
+        return
+      end
+
+      puts "Suppression imdb_id et création programmation..."
+      programmation_params.delete(:imdb_id)
+      @programmation = Programmation.new(programmation_params)
+
+      if @programmation.save
+        puts "Programmation sauvegardée !"
+        redirect_to admin_programmation_path(@programmation), notice: "Programmation créée avec succès"
+      else
+        puts "Erreurs de validation: #{@programmation.errors.full_messages}"
+        render :new
       end
     end
   end
