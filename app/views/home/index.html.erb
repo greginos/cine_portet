@@ -1,216 +1,156 @@
+<%
+  # Charge tous les contenus en une seule requête
+  @page_contents ||= PageContent.all.index_by(&:key)
+  def pc(key); raw(@page_contents[key]&.value.to_s); end
+%>
+
+<%# Font Awesome — à déplacer dans application.html.erb si pas déjà présent %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <div class="min-h-screen bg-gray-50">
-  <!-- Hero Section -->
+
+  <!-- ═══ HERO ═══ -->
   <section id="accueil" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-    <!-- Image de fond -->
     <div class="absolute inset-0 z-0">
       <%= image_tag "cinema-background.jpg", class: "w-full h-full object-cover object-center", alt: "Cinéma", style: "opacity:0.5;" %>
       <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 mix-blend-multiply opacity-80"></div>
     </div>
-    <!-- Contenu -->
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-      <h1 class="text-4xl md:text-6xl font-bold mb-6">Ciné à Portet de tous</h1>
-      <p class="text-xl md:text-2xl mb-8">Découvrez le cinéma autrement</p>
-      <%= link_to "Voir la programmation", programmations_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6"><%= pc("hero_title") %></h1>
+      <p class="text-xl md:text-2xl mb-8"><%= pc("hero_subtitle") %></p>
+      <%= link_to pc("hero_button_text"), programmations_path,
+            class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
     </div>
   </section>
-<!-- Upcoming sessions -->
-<% @session = Session.current_or_upcoming %>
-<section>
-<% if @session %>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-gray-900 mb-4">
-        Programmation du <%= I18n.l(@session.start_date, format: :short) %> au <%= I18n.l(@session.end_date, format: :short) %>
-      </h2>
-    </div>
 
-    <!-- Événements en pleine largeur -->
-    <% @events.each do |event| %>
-      <div class="mb-8">
-        <%= render partial: "events/event_card_full", locals: { event: event } %>
+  <!-- ═══ SESSIONS ═══ -->
+  <% @session = Session.current_or_upcoming %>
+  <section>
+    <% if @session %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Programmation du <%= I18n.l(@session.start_date, format: :short) %>
+            au <%= I18n.l(@session.end_date, format: :short) %>
+          </h2>
+        </div>
+        <% @events.each do |event| %>
+          <div class="mb-8">
+            <%= render partial: "events/event_card_full", locals: { event: event } %>
+          </div>
+        <% end %>
+        <% if @events.any? %>
+          <div class="mt-12 mb-6">
+            <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2">Projections</h3>
+          </div>
+        <% end %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <% @programmations.each do |programmation| %>
+            <%= render partial: "programmations/programmation_card", locals: { programmation: programmation } %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucune programmation disponible</h2>
+        <p class="text-gray-600">Revenez bientôt pour découvrir notre prochaine saison !</p>
       </div>
     <% end %>
+  </section>
 
-    <!-- Programmations en grille -->
-    <% if @events.any? %>
-      <div class="mt-12 mb-6">
-        <h3 class="text-2xl font-bold text-gray-800 border-b-2 border-indigo-500 pb-2">
-          Projections
-        </h3>
-      </div>
-    <% end %>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <% @programmations.each do |programmation| %>
-        <%= render partial: "programmations/programmation_card", locals: { programmation: programmation } %>
-      <% end %>
-    </div>
-  </div>
-<% else %>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-12">
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucune programmation disponible</h2>
-    <p class="text-gray-600">Revenez bientôt pour découvrir notre prochaine saison !</p>
-  </div>
-<% end %>
-</section>
-  <!-- À propos Section -->
+  <!-- ═══ À PROPOS ═══ -->
   <section id="a-propos" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">À propos de Ciné Portet</h2>
-        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Ciné à Portet de tous est une association située à Portet-sur-Garonne. 
-          Nous proposons une programmation éclectique allant des films d'auteur aux blockbusters, 
-          en passant par des documentaires et des films pour enfants.
-        </p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4"><%= pc("about_title") %></h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto"><%= pc("about_description") %></p>
       </div>
-      
       <div class="grid md:grid-cols-3 gap-8">
-        <div class="text-center">
-          <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2"></path>
-            </svg>
+        <% [1, 2, 3].each do |n| %>
+          <div class="text-center">
+            <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="<%= pc("about_card#{n}_icon") %> text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2"><%= pc("about_card#{n}_title") %></h3>
+            <p class="text-gray-600"><%= pc("about_card#{n}_text") %></p>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Programmation Variée</h3>
-          <p class="text-gray-600">Des films pour tous les goûts et tous les âges</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Horaires Flexibles</h3>
-          <p class="text-gray-600">Des séances à différents horaires pour s'adapter à tous</p>
-        </div>
-        
-        <div class="text-center">
-          <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Ambiance Conviviale</h3>
-          <p class="text-gray-600">Un accueil chaleureux dans un cadre agréable</p>
-        </div>
+        <% end %>
       </div>
     </div>
   </section>
 
-  <!-- Services Section -->
+  <!-- ═══ SERVICES ═══ -->
   <section id="services" class="py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Nos Services</h2>
-        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Découvrez tous les services que nous proposons pour vous offrir la meilleure expérience cinématographique.
-        </p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4"><%= pc("services_title") %></h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto"><%= pc("services_subtitle") %></p>
       </div>
-      
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-blue-600 mb-4">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-            </svg>
+        <% [1, 2].each do |n| %>
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <div class="text-blue-600 mb-4">
+              <i class="<%= pc("service#{n}_icon") %> text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2"><%= pc("service#{n}_title") %></h3>
+            <p class="text-gray-600"><%= pc("service#{n}_text") %></p>
           </div>
-          <h3 class="text-xl font-semibold mb-2">Projection HD</h3>
-          <p class="text-gray-600">Qualité d'image optimale pour une expérience immersive</p>
-        </div>
-        
-        <%
-=begin%>
- <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-purple-600 mb-4">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Réservation en ligne</h3>
-          <p class="text-gray-600">Réservez vos places facilement depuis notre site web</p>
-        </div> 
-<%
-=end%>
-        
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="text-red-600 mb-4">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Tarifs réduits</h3>
-          <p class="text-gray-600">Des prix accessibles pour tous les publics</p>
-        </div>
+        <% end %>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- ═══ CONTACT ═══ -->
   <section id="contact" class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Contactez-nous</h2>
-        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-          Une question ? Un projet ? N'hésitez pas à nous contacter !
-        </p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4"><%= pc("contact_title") %></h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto"><%= pc("contact_subtitle") %></p>
       </div>
-      
       <div class="grid md:grid-cols-2 gap-12">
-      <div>
-        <h3 class="text-2xl font-semibold mb-6">Informations</h3>
-        <div class="space-y-4">
-          <div class="flex items-center">
-            <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            <span class="text-gray-700">Salle Angèle del Rio Bettini, Allée du Grand Chêne, 31120 Portet-sur-Garonne</span>
-          </div>
-          
-          <div class="flex items-center">
-            <svg class="w-6 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            <span class="text-gray-700">contact@portet-cine.fr</span>
-          </div>
-          
-          <div class="flex items-center">
-            <a href="https://www.google.com/maps/dir//Salle+Ang%C3%A8le+del+Rio+Bettini,+All.+du+Grand+Ch%C3%AAne,+31120+Portet-sur-Garonne/@43.5419007,1.4072009,19z/data=!4m9!4m8!1m0!1m5!1m1!1s0x12aeb900035c7243:0x4155524357a5ba0a!2m2!1d1.4080327!2d43.5419007!3e0?entry=ttu&g_ep=EgoyMDI1MDYxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener" aria-label="Google Maps" class="mr-3">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="10" r="8" fill="#4285F4"/>
-                <circle cx="12" cy="10" r="3" fill="white"/>
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#4285F4"/>
-                <circle cx="12" cy="9" r="2.5" fill="white"/>
-              </svg>
-            </a>
-            <span class="text-gray-700">Itinéraire google</span>
-          </div>
-          
-          <div class="flex items-center">
-            <a href="https://waze.com/ul?ll=43.541115846729,1.40778794256&navigate=yes" target="_blank" rel="noopener" aria-label="Waze" class="mr-3">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#33CCFF"/>
-                <ellipse cx="12" cy="14" rx="7" ry="5" fill="#33CCFF"/>
-                <circle cx="9.5" cy="15" r="1" fill="#222"/>
-                <circle cx="14.5" cy="15" r="1" fill="#222"/>
-                <path d="M8 17c1.5 1 6.5 1 8-1" stroke="#222" stroke-width="1" stroke-linecap="round"/>
-              </svg>
-            </a>
-            <span class="text-gray-700">Itinéraire waze</span>
+        <div>
+          <h3 class="text-2xl font-semibold mb-6">Informations</h3>
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <i class="fa-solid fa-location-dot text-blue-600 mr-3 text-xl"></i>
+              <span class="text-gray-700"><%= pc("contact_address") %></span>
+            </div>
+            <div class="flex items-center">
+              <i class="fa-solid fa-envelope text-blue-600 mr-3 text-xl"></i>
+              <span class="text-gray-700"><%= pc("contact_email") %></span>
+            </div>
+            <div class="flex items-center">
+              <a href="<%= pc("contact_gmaps_url") %>" target="_blank" rel="noopener" aria-label="Google Maps" class="mr-3">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#4285F4"/>
+                  <circle cx="12" cy="9" r="2.5" fill="white"/>
+                </svg>
+              </a>
+              <span class="text-gray-700">Itinéraire Google Maps</span>
+            </div>
+            <div class="flex items-center">
+              <a href="<%= pc("contact_waze_url") %>" target="_blank" rel="noopener" aria-label="Waze" class="mr-3">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#33CCFF"/>
+                  <ellipse cx="12" cy="14" rx="7" ry="5" fill="#33CCFF"/>
+                  <circle cx="9.5" cy="15" r="1" fill="#222"/>
+                  <circle cx="14.5" cy="15" r="1" fill="#222"/>
+                  <path d="M8 17c1.5 1 6.5 1 8-1" stroke="#222" stroke-width="1" stroke-linecap="round"/>
+                </svg>
+              </a>
+              <span class="text-gray-700">Itinéraire Waze</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ═══ FOOTER ═══ -->
   <footer class="bg-gray-800 text-white py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <p>&copy; 2024 Ciné Portet. Tous droits réservés.</p>
-      </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p><%= pc("footer_copyright") %></p>
     </div>
   </footer>
-</div> 
+
+</div>
