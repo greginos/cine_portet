@@ -7,4 +7,12 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+# AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+PageContent::KEYS.each do |key, default_value|
+  PageContent.find_or_create_by(key: key) do |pc|
+    pc.value = default_value
+    pc.label = key.gsub("_", " ").capitalize
+  end
+end
+
+puts "✅ #{PageContent.count} page contents initialisés"

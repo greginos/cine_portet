@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_05_200250) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_14_212744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_200250) do
     t.index ["genre"], name: "index_movies_on_genre"
     t.index ["imdb_id"], name: "index_movies_on_imdb_id", unique: true
     t.index ["title"], name: "index_movies_on_title"
+  end
+
+  create_table "page_contents", force: :cascade do |t|
+    t.string "key", null: false
+    t.text "value"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_page_contents_on_key", unique: true
   end
 
   create_table "programmation_staffs", force: :cascade do |t|

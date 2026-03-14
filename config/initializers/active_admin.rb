@@ -17,7 +17,7 @@ ActiveAdmin.setup do |config|
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
   config.site_title_image = "icon.png"
-
+  config.head = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">'
   # == Load Paths
   #
   # By default Active Admin files go inside app/admin/.
